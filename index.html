@@ -159,6 +159,19 @@ button:active{
   color:#42b866;
   font-size:10px;
 }
+
+.camera-title{
+  margin-top:14px;
+  color:#72ff9b;
+  font-size:13px;
+  border-bottom:1px solid #194a2b;
+  padding-bottom:8px;
+}
+
+.back{
+  margin-top:12px;
+}
+
 </style>
 </head>
 
@@ -167,12 +180,14 @@ button:active{
 <div class="app">
 
 <header>
+
 <h1>TACTICAL AI // JAPAN</h1>
 
 <div class="status">
 <span class="dot"></span>
 SYSTEM ONLINE
 </div>
+
 </header>
 
 
@@ -257,6 +272,7 @@ ACTIVE
 </div>
 
 </div>
+
 </div>
 
 
@@ -275,58 +291,39 @@ PROCESSING
 </div>
 
 
-<!-- JAPAN SOURCES -->
+<!-- ========================= -->
+<!-- JAPAN LIVE CAMERA -->
+<!-- ========================= -->
 
 <div class="panel">
 
 <div class="label">
-JAPAN LIVE INFORMATION
+🇯🇵 JAPAN LIVE CAMERA NETWORK
 </div>
 
 <div class="small">
-公式公開情報へのアクセス
+全国の公開ライブカメラを地域から選択
 </div>
 
+<div id="cameraMenu"></div>
 
-<a
-class="link"
-href="https://www6.kaiho.mlit.go.jp/livecamera.html"
-target="_blank"
->
-📹 海上保安庁 全国ライブカメラ
-</a>
+<div id="cameraView" style="display:none">
 
+<div
+id="cameraTitle"
+class="camera-title">
+</div>
 
-<a
-class="link"
-href="https://www.hrr.mlit.go.jp/road/cctvclip/"
-target="_blank"
->
-🚗 国土交通省 道路CCTV
-</a>
+<div id="cameraLinks"></div>
 
-
-<a
-class="link"
-href="https://www.hrr.mlit.go.jp/niikoku/"
-target="_blank"
->
-🛣️ 国土交通省 新潟道路ライブカメラ
-</a>
-
-
-<a
-class="link"
-href="https://www.qsr.mlit.go.jp/kitakyu/"
-target="_blank"
->
-🚗 九州・北九州 道路ライブカメラ
-</a>
+</div>
 
 </div>
 
 
+<!-- ========================= -->
 <!-- NEWS -->
+<!-- ========================= -->
 
 <div class="panel">
 
@@ -335,9 +332,8 @@ NEWS / INFORMATION
 </div>
 
 <div class="small">
-最新ニュースを公式サイトで確認
+日本の公式情報源
 </div>
-
 
 <a
 class="link"
@@ -347,7 +343,6 @@ target="_blank"
 📰 NHK NEWS
 </a>
 
-
 <a
 class="link"
 href="https://www.jma.go.jp/bosai/"
@@ -355,7 +350,6 @@ target="_blank"
 >
 🌦️ 気象庁 防災情報
 </a>
-
 
 <a
 class="link"
@@ -368,7 +362,9 @@ target="_blank"
 </div>
 
 
+<!-- ========================= -->
 <!-- RESULT -->
+<!-- ========================= -->
 
 <div class="panel">
 
@@ -387,9 +383,18 @@ JAPAN DATA
 
 <script>
 
+
+// ==========================================
+// 基本
+// ==========================================
+
 const q=document.getElementById("q");
-const output=document.getElementById("output");
-const bar=document.getElementById("bar");
+
+const output=
+document.getElementById("output");
+
+const bar=
+document.getElementById("bar");
 
 const network=
 document.getElementById("network");
@@ -404,9 +409,9 @@ const locationBox=
 document.getElementById("location");
 
 
-// ======================
+// ==========================================
 // 音声認識
-// ======================
+// ==========================================
 
 function listen(){
 
@@ -428,7 +433,9 @@ const recognition=
 new SpeechRecognition();
 
 recognition.lang="ja-JP";
+
 recognition.interimResults=false;
+
 recognition.continuous=false;
 
 output.textContent=
@@ -467,24 +474,109 @@ output.textContent=
 }
 
 
-// ======================
-// 都市
-// ======================
+// ==========================================
+// 都市データ
+// ==========================================
 
 function getCity(text){
 
 const cities={
 
 東京:[35.6762,139.6503],
+
 大阪:[34.6937,135.5023],
+
 京都:[35.0116,135.7681],
+
 名古屋:[35.1815,136.9066],
+
 札幌:[43.0618,141.3545],
+
 福岡:[33.5904,130.4017],
+
 仙台:[38.2682,140.8694],
+
 広島:[34.3853,132.4553],
+
 横浜:[35.4437,139.6380],
-那覇:[26.2124,127.6809]
+
+那覇:[26.2124,127.6809],
+
+函館:[41.7687,140.7291],
+
+小樽:[43.1907,140.9947],
+
+青森:[40.8246,140.7400],
+
+盛岡:[39.7036,141.1527],
+
+秋田:[39.7200,140.1025],
+
+山形:[38.2554,140.3396],
+
+福島:[37.7608,140.4747],
+
+水戸:[36.3418,140.4468],
+
+宇都宮:[36.5551,139.8828],
+
+前橋:[36.3895,139.0634],
+
+さいたま:[35.8617,139.6455],
+
+千葉:[35.6073,140.1063],
+
+甲府:[35.6642,138.5684],
+
+長野:[36.6513,138.1810],
+
+富山:[36.6953,137.2113],
+
+金沢:[36.5947,136.6256],
+
+福井:[36.0652,136.2216],
+
+岐阜:[35.4233,136.7607],
+
+静岡:[34.9756,138.3828],
+
+津:[34.7303,136.5086],
+
+大津:[35.0179,135.8546],
+
+神戸:[34.6901,135.1956],
+
+奈良:[34.6851,135.8048],
+
+和歌山:[34.2260,135.1675],
+
+鳥取:[35.5039,134.2377],
+
+松江:[35.4723,133.0505],
+
+岡山:[34.6618,133.9344],
+
+山口:[34.1861,131.4705],
+
+徳島:[34.0658,134.5593],
+
+高松:[34.3401,134.0434],
+
+松山:[33.8416,132.7657],
+
+高知:[33.5597,133.5311],
+
+佐賀:[33.2494,130.2988],
+
+長崎:[32.7448,129.8737],
+
+熊本:[32.7898,130.7417],
+
+大分:[33.2382,131.6126],
+
+宮崎:[31.9111,131.4239],
+
+鹿児島:[31.5602,130.5581]
 
 };
 
@@ -493,9 +585,13 @@ for(const city in cities){
 if(text.includes(city)){
 
 return{
+
 name:city,
+
 lat:cities[city][0],
+
 lon:cities[city][1]
+
 };
 
 }
@@ -503,42 +599,66 @@ lon:cities[city][1]
 }
 
 return{
+
 name:"東京",
+
 lat:35.6762,
+
 lon:139.6503
+
 };
 
 }
 
 
-// ======================
+// ==========================================
 // 天気
-// ======================
+// ==========================================
 
 function weatherText(code){
 
 const list={
 
 0:"快晴",
+
 1:"晴れ",
+
 2:"一部曇り",
+
 3:"曇り",
+
 45:"霧",
+
 48:"霧",
+
 51:"弱い霧雨",
+
 53:"霧雨",
+
 55:"強い霧雨",
+
 61:"弱い雨",
+
 63:"雨",
+
 65:"強い雨",
+
 71:"弱い雪",
+
 73:"雪",
+
 75:"強い雪",
+
 80:"にわか雨",
+
 81:"雨",
+
 82:"強いにわか雨",
+
 95:"雷雨",
+
 96:"雷雨",
+
 99:"強い雷雨"
 
 };
@@ -548,13 +668,14 @@ return list[code]||"不明";
 }
 
 
-// ======================
+// ==========================================
 // 天気API
-// ======================
+// ==========================================
 
 async function getWeather(city){
 
 const url=
+
 "https://api.open-meteo.com/v1/forecast"+
 "?latitude="+city.lat+
 "&longitude="+city.lon+
@@ -575,13 +696,1026 @@ return await response.json();
 }
 
 
-// ======================
-// AI
-// ======================
+// ==========================================
+// ライブカメラデータ
+// ==========================================
+
+const cameraData={
+
+
+// 北海道
+"北海道":{
+
+"札幌市":[
+
+[
+"北海道開発局 道路情報",
+"https://www.hkd.mlit.go.jp/"
+]
+
+],
+
+"函館市":[
+
+[
+"函館海上保安部 ライブカメラ",
+"https://www6.kaiho.mlit.go.jp/01kanku/hakodate/livecamera.html"
+]
+
+],
+
+"小樽市":[
+
+[
+"小樽海上保安部",
+"https://www6.kaiho.mlit.go.jp/01kanku/otaru/"
+]
+
+],
+
+"網走市":[
+
+[
+"網走開発建設部",
+"https://www.hkd.mlit.go.jp/ab/"
+]
+
+],
+
+"稚内市":[
+
+[
+"稚内開発建設部",
+"https://www.hkd.mlit.go.jp/wk/"
+]
+
+]
+
+},
+
+
+// 青森
+"青森県":{
+
+"青森市":[
+
+[
+"青森海上保安部",
+"https://www6.kaiho.mlit.go.jp/02kanku/aomori/"
+]
+
+]
+
+},
+
+
+// 岩手
+"岩手県":{
+
+"盛岡市":[
+
+[
+"岩手河川国道事務所",
+"https://www.thr.mlit.go.jp/iwate/"
+]
+
+]
+
+},
+
+
+// 宮城
+"宮城県":{
+
+"仙台市":[
+
+[
+"仙台河川国道事務所",
+"https://www.thr.mlit.go.jp/sendai/"
+]
+
+]
+
+},
+
+
+// 秋田
+"秋田県":{
+
+"秋田市":[
+
+[
+"秋田河川国道事務所",
+"https://www.thr.mlit.go.jp/akita/"
+]
+
+]
+
+},
+
+
+// 山形
+"山形県":{
+
+"山形市":[
+
+[
+"山形河川国道事務所",
+"https://www.thr.mlit.go.jp/yamagata/"
+]
+
+]
+
+},
+
+
+// 福島
+"福島県":{
+
+"福島市":[
+
+[
+"福島河川国道事務所",
+"https://www.thr.mlit.go.jp/fukushima/"
+]
+
+]
+
+},
+
+
+// 新潟
+"新潟県":{
+
+"新潟市":[
+
+[
+"北陸地方整備局 道路CCTV",
+"https://www.hrr.mlit.go.jp/road/cctvclip/"
+]
+
+],
+
+"村上市":[
+
+[
+"道路CCTV",
+"https://www.hrr.mlit.go.jp/road/cctvclip/"
+]
+
+],
+
+"湯沢町":[
+
+[
+"道路CCTV",
+"https://www.hrr.mlit.go.jp/road/cctvclip/"
+]
+
+]
+
+},
+
+
+// 富山
+"富山県":{
+
+"富山市":[
+
+[
+"富山河川国道事務所",
+"https://www.hrr.mlit.go.jp/toyama/"
+]
+
+]
+
+},
+
+
+// 石川
+"石川県":{
+
+"金沢市":[
+
+[
+"金沢河川国道事務所",
+"https://www.hrr.mlit.go.jp/kanazawa/"
+]
+
+]
+
+},
+
+
+// 福井
+"福井県":{
+
+"福井市":[
+
+[
+"福井河川国道事務所",
+"https://www.hrr.mlit.go.jp/fukui/"
+]
+
+]
+
+},
+
+
+// 茨城
+"茨城県":{
+
+"水戸市":[
+
+[
+"常陸河川国道事務所",
+"https://www.ktr.mlit.go.jp/hitachi/"
+]
+
+]
+
+},
+
+
+// 栃木
+"栃木県":{
+
+"宇都宮市":[
+
+[
+"宇都宮国道事務所",
+"https://www.ktr.mlit.go.jp/utunomiya/"
+]
+
+]
+
+},
+
+
+// 群馬
+"群馬県":{
+
+"前橋市":[
+
+[
+"高崎河川国道事務所",
+"https://www.ktr.mlit.go.jp/takasaki/"
+]
+
+]
+
+},
+
+
+// 埼玉
+"埼玉県":{
+
+"さいたま市":[
+
+[
+"大宮国道事務所",
+"https://www.ktr.mlit.go.jp/oomiya/"
+]
+
+]
+
+},
+
+
+// 千葉
+"千葉県":{
+
+"千葉市":[
+
+[
+"千葉国道事務所",
+"https://www.ktr.mlit.go.jp/chiba/"
+]
+
+]
+
+},
+
+
+// 東京
+"東京都":{
+
+"東京":[
+
+[
+"東京国道事務所",
+"https://www.ktr.mlit.go.jp/toukoku/"
+]
+
+]
+
+},
+
+
+// 神奈川
+"神奈川県":{
+
+"横浜市":[
+
+[
+"横浜国道事務所",
+"https://www.ktr.mlit.go.jp/yokohama/"
+]
+
+]
+
+},
+
+
+// 山梨
+"山梨県":{
+
+"甲府市":[
+
+[
+"甲府河川国道事務所",
+"https://www.ktr.mlit.go.jp/koufu/"
+]
+
+]
+
+},
+
+
+// 長野
+"長野県":{
+
+"長野市":[
+
+[
+"長野国道事務所",
+"https://www.hrr.mlit.go.jp/nagano/"
+]
+
+]
+
+},
+
+
+// 岐阜
+"岐阜県":{
+
+"岐阜市":[
+
+[
+"岐阜国道事務所",
+"https://www.cbr.mlit.go.jp/gifu/"
+]
+
+]
+
+},
+
+
+// 静岡
+"静岡県":{
+
+"静岡市":[
+
+[
+"静岡国道事務所",
+"https://www.cbr.mlit.go.jp/shizukoku/"
+]
+
+]
+
+},
+
+
+// 愛知
+"愛知県":{
+
+"名古屋市":[
+
+[
+"名古屋国道事務所",
+"https://www.cbr.mlit.go.jp/meikoku/"
+]
+
+]
+
+},
+
+
+// 三重
+"三重県":{
+
+"津市":[
+
+[
+"三重河川国道事務所",
+"https://www.cbr.mlit.go.jp/mie/"
+]
+
+]
+
+},
+
+
+// 滋賀
+"滋賀県":{
+
+"大津市":[
+
+[
+"滋賀国道事務所",
+"https://www.kkr.mlit.go.jp/shiga/"
+]
+
+]
+
+},
+
+
+// 京都
+"京都府":{
+
+"京都市":[
+
+[
+"京都国道事務所",
+"https://www.kkr.mlit.go.jp/kyoto/"
+]
+
+]
+
+},
+
+
+// 大阪
+"大阪府":{
+
+"大阪市":[
+
+[
+"大阪国道事務所",
+"https://www.kkr.mlit.go.jp/osaka/"
+]
+
+]
+
+},
+
+
+// 兵庫
+"兵庫県":{
+
+"神戸市":[
+
+[
+"兵庫国道事務所",
+"https://www.kkr.mlit.go.jp/hyogo/"
+]
+
+]
+
+},
+
+
+// 奈良
+"奈良県":{
+
+"奈良市":[
+
+[
+"奈良国道事務所",
+"https://www.kkr.mlit.go.jp/nara/"
+]
+
+]
+
+},
+
+
+// 和歌山
+"和歌山県":{
+
+"和歌山市":[
+
+[
+"和歌山河川国道事務所",
+"https://www.kkr.mlit.go.jp/wakayama/"
+]
+
+]
+
+},
+
+
+// 岡山
+"岡山県":{
+
+"岡山市":[
+
+[
+"岡山国道事務所",
+"https://www.cgr.mlit.go.jp/okakoku/"
+]
+
+]
+
+},
+
+
+// 広島
+"広島県":{
+
+"広島市":[
+
+[
+"広島国道事務所",
+"https://www.cgr.mlit.go.jp/hirokoku/"
+]
+
+]
+
+},
+
+
+// 山口
+"山口県":{
+
+"山口市":[
+
+[
+"山口河川国道事務所",
+"https://www.cgr.mlit.go.jp/yamaguchi/"
+]
+
+]
+
+},
+
+
+// 徳島
+"徳島県":{
+
+"徳島市":[
+
+[
+"徳島河川国道事務所",
+"https://www.skr.mlit.go.jp/tokushima/"
+]
+
+]
+
+},
+
+
+// 香川
+"香川県":{
+
+"高松市":[
+
+[
+"香川河川国道事務所",
+"https://www.skr.mlit.go.jp/kagawa/"
+]
+
+]
+
+},
+
+
+// 愛媛
+"愛媛県":{
+
+"松山市":[
+
+[
+"松山河川国道事務所",
+"https://www.skr.mlit.go.jp/matsuyam/"
+]
+
+]
+
+},
+
+
+// 高知
+"高知県":{
+
+"高知市":[
+
+[
+"高知河川国道事務所",
+"https://www.skr.mlit.go.jp/kochi/"
+]
+
+]
+
+},
+
+
+// 福岡
+"福岡県":{
+
+"北九州市":[
+
+[
+"北九州国道事務所",
+"https://www.qsr.mlit.go.jp/kitakyu/"
+]
+
+]
+
+},
+
+
+// 佐賀
+"佐賀県":{
+
+"佐賀市":[
+
+[
+"佐賀河川国道事務所",
+"https://www.qsr.mlit.go.jp/saga/"
+]
+
+]
+
+},
+
+
+// 熊本
+"熊本県":{
+
+"熊本市":[
+
+[
+"熊本河川国道事務所",
+"https://www.qsr.mlit.go.jp/kumamoto/"
+]
+
+]
+
+},
+
+
+// 大分
+"大分県":{
+
+"大分市":[
+
+[
+"大分河川国道事務所",
+"https://www.qsr.mlit.go.jp/oita/"
+]
+
+]
+
+},
+
+
+// 宮崎
+"宮崎県":{
+
+"宮崎市":[
+
+[
+"宮崎河川国道事務所",
+"https://www.qsr.mlit.go.jp/miyazaki/"
+]
+
+]
+
+},
+
+
+// 鹿児島
+"鹿児島県":{
+
+"鹿児島市":[
+
+[
+"鹿児島国道事務所",
+"https://www.qsr.mlit.go.jp/kagoshima/"
+]
+
+]
+
+},
+
+
+// 沖縄
+"沖縄県":{
+
+"那覇市":[
+
+[
+"沖縄総合事務局 道路情報",
+"https://www.dc.ogb.go.jp/road/"
+]
+
+]
+
+}
+
+};
+
+
+// ==========================================
+// 都道府県
+// ==========================================
+
+const prefectures=[
+
+"北海道",
+"青森県",
+"岩手県",
+"宮城県",
+"秋田県",
+"山形県",
+"福島県",
+
+"茨城県",
+"栃木県",
+"群馬県",
+"埼玉県",
+"千葉県",
+"東京都",
+"神奈川県",
+
+"新潟県",
+"富山県",
+"石川県",
+"福井県",
+
+"山梨県",
+"長野県",
+"岐阜県",
+"静岡県",
+"愛知県",
+"三重県",
+
+"滋賀県",
+"京都府",
+"大阪府",
+"兵庫県",
+"奈良県",
+"和歌山県",
+
+"鳥取県",
+"島根県",
+"岡山県",
+"広島県",
+"山口県",
+
+"徳島県",
+"香川県",
+"愛媛県",
+"高知県",
+
+"福岡県",
+"佐賀県",
+"長崎県",
+"熊本県",
+"大分県",
+"宮崎県",
+"鹿児島県",
+"沖縄県"
+
+];
+
+
+// ==========================================
+// 都道府県表示
+// ==========================================
+
+function showPrefectures(){
+
+const menu=
+document.getElementById("cameraMenu");
+
+const view=
+document.getElementById("cameraView");
+
+menu.innerHTML="";
+
+view.style.display="none";
+
+prefectures.forEach(pref=>{
+
+const button=
+document.createElement("button");
+
+button.textContent=
+"📍 "+pref;
+
+button.onclick=
+function(){
+
+showCities(pref);
+
+};
+
+menu.appendChild(button);
+
+});
+
+}
+
+
+// ==========================================
+// 市区町村表示
+// ==========================================
+
+function showCities(pref){
+
+const menu=
+document.getElementById("cameraMenu");
+
+const view=
+document.getElementById("cameraView");
+
+const title=
+document.getElementById("cameraTitle");
+
+const links=
+document.getElementById("cameraLinks");
+
+menu.innerHTML="";
+
+view.style.display="block";
+
+title.textContent=
+"// "+pref+" LIVE CAMERA";
+
+links.innerHTML="";
+
+
+// 戻る
+
+const back=
+document.createElement("button");
+
+back.className="back";
+
+back.textContent=
+"← 都道府県一覧";
+
+back.onclick=
+showPrefectures;
+
+menu.appendChild(back);
+
+
+const cities=
+cameraData[pref];
+
+
+// データがない県
+
+if(!cities){
+
+const message=
+document.createElement("div");
+
+message.className="small";
+
+message.style.marginTop="14px";
+
+message.textContent=
+"この地域のカメラ情報を準備中です。";
+
+menu.appendChild(message);
+
+const official=
+document.createElement("a");
+
+official.className="link";
+
+official.href=
+"https://www6.kaiho.mlit.go.jp/livecamera.html";
+
+official.target="_blank";
+
+official.textContent=
+"📹 海上保安庁 全国ライブカメラ";
+
+links.appendChild(official);
+
+return;
+
+}
+
+
+// 市区町村
+
+Object.keys(cities).forEach(city=>{
+
+const button=
+document.createElement("button");
+
+button.textContent=
+"🏙️ "+city;
+
+button.onclick=
+function(){
+
+showCameras(pref,city);
+
+};
+
+menu.appendChild(button);
+
+});
+
+}
+
+
+// ==========================================
+// カメラ一覧
+// ==========================================
+
+function showCameras(pref,city){
+
+const menu=
+document.getElementById("cameraMenu");
+
+const view=
+document.getElementById("cameraView");
+
+const title=
+document.getElementById("cameraTitle");
+
+const links=
+document.getElementById("cameraLinks");
+
+menu.innerHTML="";
+
+view.style.display="block";
+
+title.textContent=
+"// "+pref+" / "+city;
+
+links.innerHTML="";
+
+
+// 市区町村へ戻る
+
+const back=
+document.createElement("button");
+
+back.textContent=
+"← "+pref+" 市区町村";
+
+back.onclick=
+function(){
+
+showCities(pref);
+
+};
+
+menu.appendChild(back);
+
+
+// カメラ
+
+const cameras=
+cameraData[pref][city];
+
+cameras.forEach(camera=>{
+
+const link=
+document.createElement("a");
+
+link.className="link";
+
+link.href=camera[1];
+
+link.target="_blank";
+
+link.textContent=
+"📹 "+camera[0];
+
+links.appendChild(link);
+
+});
+
+}
+
+
+// ==========================================
+// 初期化
+// ==========================================
+
+showPrefectures();
+
+
+// ==========================================
+// AI ANALYZE
+// ==========================================
 
 async function analyze(){
 
-const text=q.value.trim();
+const text=
+q.value.trim();
 
 if(!text){
 
@@ -592,6 +1726,7 @@ return;
 
 }
 
+
 output.textContent=
 ">> QUERY RECEIVED\n\n"+
 text+
@@ -600,6 +1735,7 @@ text+
 bar.style.width="20%";
 
 await wait(350);
+
 
 const city=
 getCity(text);
@@ -610,14 +1746,18 @@ city.name;
 bar.style.width="40%";
 
 
+// ==========================================
 // 天気
+// ==========================================
 
 if(
+
 text.includes("天気")||
 text.includes("気温")||
 text.includes("雨")||
 text.includes("暑い")||
 text.includes("寒い")
+
 ){
 
 try{
@@ -627,6 +1767,7 @@ network.textContent=
 
 data.textContent=
 "RECEIVING";
+
 
 const weather=
 await getWeather(city);
@@ -649,11 +1790,14 @@ current.wind_speed_10m;
 const condition=
 weatherText(current.weather_code);
 
+
 bar.style.width="80%";
 
 await wait(500);
 
+
 output.textContent=
+
 ">> ANALYSIS COMPLETE\n\n"+
 "━━━━━━━━━━━━━━━━━━\n"+
 "LOCATION : "+city.name+
@@ -666,7 +1810,9 @@ output.textContent=
 "DATA SOURCE : OPEN-METEO"+
 "\nSTATUS : LIVE DATA RECEIVED";
 
+
 info.innerHTML=
+
 "🇯🇵 "+city.name+
 "<br><br>"+
 "🌤️ "+condition+
@@ -677,11 +1823,16 @@ info.innerHTML=
 "<br>"+
 "💨 風速 "+wind+" km/h";
 
-data.textContent="LIVE";
 
-bar.style.width="100%";
+data.textContent=
+"LIVE";
+
+bar.style.width=
+"100%";
+
 
 speak(
+
 city.name+
 "の現在の天気は"+
 condition+
@@ -689,12 +1840,17 @@ condition+
 "気温は"+
 temp+
 "度です。"
+
 );
+
 
 }catch(error){
 
-network.textContent="ERROR";
-data.textContent="OFFLINE";
+network.textContent=
+"ERROR";
+
+data.textContent=
+"OFFLINE";
 
 output.textContent=
 "DATA LINK ERROR\n\n"+
@@ -705,124 +1861,182 @@ output.textContent=
 }
 
 
-// ライブカメラ
+// ==========================================
+// カメラ
+// ==========================================
 
 else if(
+
 text.includes("カメラ")||
 text.includes("ライブ")||
 text.includes("映像")
+
 ){
 
-bar.style.width="100%";
+bar.style.width=
+"100%";
+
 
 output.textContent=
+
 ">> LIVE CAMERA MODULE\n\n"+
-"日本の公式公開ライブカメラを確認できます。\n\n"+
-"下のJAPAN LIVE INFORMATIONから\n"+
-"カメラを選択してください。";
+"全国ライブカメラネットワークを起動しました。\n\n"+
+"下のJAPAN LIVE CAMERA NETWORKから\n"+
+"都道府県 → 市区町村 → カメラ\n"+
+"の順番で選択してください。";
+
 
 speak(
-"日本の公式公開ライブカメラを表示できます。"
+
+"全国ライブカメラネットワークを起動しました。"
+
 );
 
 }
 
 
+// ==========================================
 // ニュース
+// ==========================================
 
 else if(
+
 text.includes("ニュース")||
 text.includes("最新情報")||
 text.includes("日本の情報")
+
 ){
 
-bar.style.width="100%";
+bar.style.width=
+"100%";
+
 
 output.textContent=
+
 ">> NEWS MODULE\n\n"+
-"最新の日本情報を確認できます。\n\n"+
+"日本の公式情報源を表示しています。\n\n"+
 "下のNEWS INFORMATIONから\n"+
-"公式情報源を選択してください。";
+"確認したい情報を選択してください。";
+
 
 speak(
+
 "日本の最新情報を確認できます。"
+
 );
 
 }
 
 
+// ==========================================
 // その他
+// ==========================================
 
 else{
 
-bar.style.width="100%";
+bar.style.width=
+"100%";
+
 
 output.textContent=
+
 ">> QUERY RECEIVED\n\n"+
 text+
 "\n\n"+
 "TACTICAL AIは入力を認識しました。\n\n"+
-"現在利用可能なモジュール：\n"+
-"・天気情報\n"+
-"・公開ライブカメラ\n"+
+"利用可能なモジュール：\n"+
+"・全国天気情報\n"+
+"・全国公開ライブカメラ\n"+
 "・ニュース情報\n"+
 "・防災情報\n"+
 "・交通情報";
 
 }
 
+
 setTimeout(
+
 ()=>{
-bar.style.width="0%";
+
+bar.style.width=
+"0%";
+
 },
+
 1000
+
 );
 
 }
 
 
-// ======================
+// ==========================================
 // 音声
-// ======================
+// ==========================================
 
 function speak(text){
 
-if(!("speechSynthesis" in window))
+if(
+!("speechSynthesis" in window)
+)
 return;
 
+
 speechSynthesis.cancel();
+
 
 const utterance=
 new SpeechSynthesisUtterance(text);
 
-utterance.lang="ja-JP";
-utterance.rate=1;
-utterance.pitch=1;
 
-speechSynthesis.speak(utterance);
+utterance.lang=
+"ja-JP";
 
-}
+utterance.rate=
+1;
+
+utterance.pitch=
+1;
 
 
-// ======================
-
-function wait(ms){
-
-return new Promise(
-resolve=>setTimeout(resolve,ms)
+speechSynthesis.speak(
+utterance
 );
 
 }
 
 
+// ==========================================
+// WAIT
+// ==========================================
+
+function wait(ms){
+
+return new Promise(
+
+resolve=>
+setTimeout(resolve,ms)
+
+);
+
+}
+
+
+// ==========================================
+// ENTER
+// ==========================================
+
 q.addEventListener(
+
 "keydown",
+
 function(e){
 
 if(e.key==="Enter")
 analyze();
 
 }
+
 );
 
 </script>
