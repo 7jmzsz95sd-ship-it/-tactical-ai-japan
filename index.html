@@ -4,42 +4,154 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>TACTICAL AI // JAPAN</title>
+
 <style>
-body{
+*{box-sizing:border-box}
+
+html,body{
   margin:0;
+  min-height:100%;
   background:#020604;
   color:#72ff9b;
   font-family:monospace;
-  min-height:100vh;
 }
+
+body{
+  overflow-x:hidden;
+}
+
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(rgba(80,255,130,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(80,255,130,.035) 1px,transparent 1px);
+  background-size:24px 24px;
+}
+
 .app{
   max-width:700px;
   margin:auto;
-  padding:20px;
+  padding:18px;
 }
-h1{
-  letter-spacing:3px;
+
+header{
   border-bottom:1px solid #245e38;
-  padding-bottom:15px;
+  padding:12px 0 16px;
 }
+
+h1{
+  margin:0;
+  font-size:22px;
+  letter-spacing:3px;
+}
+
+.status{
+  margin-top:8px;
+  font-size:11px;
+}
+
+.dot{
+  display:inline-block;
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#48ff80;
+  box-shadow:0 0 10px #48ff80;
+  margin-right:6px;
+}
+
 .panel{
   border:1px solid #205f38;
-  padding:15px;
-  margin-top:15px;
-  background:#001408;
+  background:rgba(0,20,8,.85);
+  padding:14px;
+  margin-top:14px;
 }
+
+.label{
+  color:#42b866;
+  font-size:10px;
+  margin-bottom:10px;
+  letter-spacing:1px;
+}
+
+input{
+  width:100%;
+  padding:14px;
+  background:#010a04;
+  border:1px solid #287a46;
+  color:#9affb5;
+  font:14px monospace;
+  outline:none;
+}
+
 button{
   width:100%;
-  padding:15px;
+  padding:14px;
   margin-top:10px;
   background:#092a15;
   color:#72ff9b;
   border:1px solid #39c96b;
-  font:bold 14px monospace;
+  font:bold 13px monospace;
 }
+
+button:active{
+  transform:scale(.98);
+}
+
 #output{
+  min-height:180px;
   white-space:pre-wrap;
   line-height:1.7;
+  font-size:13px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+
+.box{
+  border:1px solid #194a2b;
+  padding:10px;
+  font-size:11px;
+}
+
+.value{
+  font-size:14px;
+  margin-top:5px;
+}
+
+.bar{
+  height:6px;
+  background:#092512;
+  margin-top:8px;
+}
+
+.bar span{
+  display:block;
+  height:100%;
+  width:0;
+  background:#48ff80;
+  box-shadow:0 0 10px #48ff80;
+  transition:width .4s;
+}
+
+.camera{
+  display:block;
+  padding:12px;
+  margin-top:8px;
+  border:1px solid #194a2b;
+  color:#72ff9b;
+  text-decoration:none;
+}
+
+.small{
+  font-size:10px;
+  color:#42b866;
 }
 </style>
 </head>
@@ -48,56 +160,512 @@ button{
 
 <div class="app">
 
-<h1>TACTICAL AI // JAPAN</h1>
+<header>
+  <h1>TACTICAL AI // JAPAN</h1>
+  <div class="status">
+    <span class="dot"></span>
+    SYSTEM ONLINE
+  </div>
+</header>
 
 <div class="panel">
-STATUS : <b>ONLINE</b><br>
-NETWORK : <b>READY</b><br>
-JAPAN DATA : <b>STANDBY</b>
+
+<div class="label">VOICE / QUERY TERMINAL</div>
+
+<input
+ id="q"
+ placeholder="例：東京の天気は？"
+ autocomplete="off"
+>
+
+<button onclick="listen()">🎤 SPEAK</button>
+
+<button onclick="analyze()">▶ ANALYZE</button>
+
 </div>
 
 <div class="panel">
-<button onclick="speak()">🎤 SPEAK</button>
-</div>
 
-<div class="panel">
+<div class="label">ANALYSIS OUTPUT</div>
+
 <div id="output">
 TACTICAL AI SYSTEM READY.
-Waiting for voice input...
+
+日本のリアルタイム情報モジュール待機中...
 </div>
+
+</div>
+
+<div class="panel">
+
+<div class="label">LIVE DATA</div>
+
+<div class="grid">
+
+<div class="box">
+NETWORK
+<div class="value" id="network">READY</div>
+</div>
+
+<div class="box">
+DATA
+<div class="value" id="data">STANDBY</div>
+</div>
+
+<div class="box">
+LOCATION
+<div class="value" id="location">JAPAN</div>
+</div>
+
+<div class="box">
+VOICE
+<div class="value">ACTIVE</div>
+</div>
+
+</div>
+
+</div>
+
+<div class="panel">
+
+<div class="label">PROCESSING</div>
+
+<div class="bar">
+<span id="bar"></span>
+</div>
+
+</div>
+
+<div class="panel">
+
+<div class="label">JAPAN INFORMATION</div>
+
+<div id="info">
+情報取得待機中...
+</div>
+
 </div>
 
 </div>
 
 <script>
-function speak(){
 
-  if(!("webkitSpeechRecognition" in window)){
-    document.getElementById("output").textContent=
-      "ERROR\n\nこのブラウザでは音声認識を利用できません。";
+const q=document.getElementById("q");
+const output=document.getElementById("output");
+const bar=document.getElementById("bar");
+const network=document.getElementById("network");
+const data=document.getElementById("data");
+const info=document.getElementById("info");
+
+
+// ======================
+// 音声入力
+// ======================
+
+function listen(){
+
+  const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+  if(!SpeechRecognition){
+
+    output.textContent=
+      "ERROR\n\n"+
+      "このブラウザでは音声認識が利用できません。";
+
     return;
   }
 
-  const recognition=new webkitSpeechRecognition();
+  const recognition=new SpeechRecognition();
 
   recognition.lang="ja-JP";
-  recognition.start();
+  recognition.interimResults=false;
+  recognition.continuous=false;
 
-  document.getElementById("output").textContent=
-    ">> LISTENING...\n\n話しかけてください。";
+  output.textContent=
+    ">> VOICE SYSTEM\n\n"+
+    "LISTENING...\n\n"+
+    "話しかけてください。";
+
+  recognition.start();
 
   recognition.onresult=function(event){
 
-    const text=event.results[0][0].transcript;
+    const text=
+      event.results[0][0].transcript;
 
-    document.getElementById("output").textContent=
+    q.value=text;
+
+    output.textContent=
       ">> VOICE RECEIVED\n\n"+
       "QUERY : "+text+
-      "\n\n>> ANALYZING...";
+      "\n\n"+
+      "音声入力を受信しました。";
+
+    analyze();
+
+  };
+
+  recognition.onerror=function(){
+
+    output.textContent=
+      "VOICE ERROR\n\n"+
+      "音声を認識できませんでした。";
 
   };
 
 }
+
+
+// ======================
+// 都市判定
+// ======================
+
+function getCity(text){
+
+  const cities={
+
+    "東京":{
+      lat:35.6762,
+      lon:139.6503
+    },
+
+    "大阪":{
+      lat:34.6937,
+      lon:135.5023
+    },
+
+    "京都":{
+      lat:35.0116,
+      lon:135.7681
+    },
+
+    "名古屋":{
+      lat:35.1815,
+      lon:136.9066
+    },
+
+    "札幌":{
+      lat:43.0618,
+      lon:141.3545
+    },
+
+    "福岡":{
+      lat:33.5904,
+      lon:130.4017
+    },
+
+    "仙台":{
+      lat:38.2682,
+      lon:140.8694
+    },
+
+    "広島":{
+      lat:34.3853,
+      lon:132.4553
+    },
+
+    "横浜":{
+      lat:35.4437,
+      lon:139.6380
+    }
+
+  };
+
+  for(const city in cities){
+
+    if(text.includes(city)){
+
+      return {
+        name:city,
+        ...cities[city]
+      };
+
+    }
+
+  }
+
+  return {
+    name:"東京",
+    lat:35.6762,
+    lon:139.6503
+  };
+
+}
+
+
+// ======================
+// 天気コード
+// ======================
+
+function weatherText(code){
+
+  const list={
+
+    0:"快晴",
+
+    1:"晴れ",
+    2:"一部曇り",
+    3:"曇り",
+
+    45:"霧",
+    48:"霧",
+
+    51:"弱い霧雨",
+    53:"霧雨",
+    55:"強い霧雨",
+
+    61:"弱い雨",
+    63:"雨",
+    65:"強い雨",
+
+    71:"弱い雪",
+    73:"雪",
+    75:"強い雪",
+
+    80:"にわか雨",
+    81:"雨",
+    82:"強いにわか雨",
+
+    95:"雷雨",
+    96:"雷雨",
+    99:"強い雷雨"
+
+  };
+
+  return list[code] || "不明";
+
+}
+
+
+// ======================
+// 天気取得
+// ======================
+
+async function getWeather(city){
+
+  const url=
+    "https://api.open-meteo.com/v1/forecast"+
+    "?latitude="+city.lat+
+    "&longitude="+city.lon+
+    "&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m"+
+    "&timezone=Asia%2FTokyo";
+
+  const response=await fetch(url);
+
+  if(!response.ok){
+
+    throw new Error("Weather API ERROR");
+
+  }
+
+  return await response.json();
+
+}
+
+
+// ======================
+// AI解析
+// ======================
+
+async function analyze(){
+
+  const text=q.value.trim();
+
+  if(!text){
+
+    output.textContent=
+      "ERROR\n\nQUERY NOT FOUND.";
+
+    return;
+
+  }
+
+  output.textContent=
+    ">> QUERY RECEIVED\n\n"+
+    text+
+    "\n\n"+
+    ">> INITIALIZING JAPAN DATA LINK...";
+
+  bar.style.width="20%";
+
+  await wait(400);
+
+  const city=getCity(text);
+
+  output.textContent+=
+    "\n>> LOCATION : "+city.name;
+
+  document.getElementById("location").textContent=
+    city.name;
+
+  bar.style.width="45%";
+
+  await wait(400);
+
+  // 天気について質問された場合
+
+  if(
+    text.includes("天気") ||
+    text.includes("気温") ||
+    text.includes("雨") ||
+    text.includes("暑い") ||
+    text.includes("寒い")
+  ){
+
+    try{
+
+      network.textContent="CONNECTED";
+      data.textContent="RECEIVING";
+
+      const weather=
+        await getWeather(city);
+
+      bar.style.width="80%";
+
+      const current=
+        weather.current;
+
+      const temp=
+        current.temperature_2m;
+
+      const feels=
+        current.apparent_temperature;
+
+      const humidity=
+        current.relative_humidity_2m;
+
+      const wind=
+        current.wind_speed_10m;
+
+      const condition=
+        weatherText(current.weather_code);
+
+      const answer=
+        ">> REALTIME WEATHER DATA\n\n"+
+        "LOCATION : "+city.name+"\n"+
+        "CONDITION : "+condition+"\n"+
+        "TEMPERATURE : "+temp+" °C\n"+
+        "FEELS LIKE : "+feels+" °C\n"+
+        "HUMIDITY : "+humidity+" %\n"+
+        "WIND : "+wind+" km/h\n\n"+
+        "DATA SOURCE : OPEN-METEO\n"+
+        "STATUS : LIVE DATA RECEIVED";
+
+      await wait(500);
+
+      bar.style.width="100%";
+
+      output.textContent=
+        answer+
+        "\n\n━━━━━━━━━━━━━━━━━━\n"+
+        "TACTICAL AI RESPONSE\n"+
+        "「"+city.name+"の現在の天気情報を取得しました。」";
+
+      info.innerHTML=
+        "🇯🇵 "+city.name+
+        "<br><br>"+
+        "🌤 "+condition+
+        "<br>"+
+        "🌡 "+temp+" °C"+
+        "<br>"+
+        "💧 湿度 "+humidity+" %"+
+        "<br>"+
+        "💨 風速 "+wind+" km/h";
+
+      data.textContent="LIVE";
+
+      speak(
+        city.name+
+        "の現在の天気は"+
+        condition+
+        "です。"+
+        "気温は"+temp+
+        "度です。"
+      );
+
+    }catch(error){
+
+      network.textContent="ERROR";
+      data.textContent="OFFLINE";
+
+      output.textContent=
+        "DATA LINK ERROR\n\n"+
+        "日本の天気データを取得できませんでした。\n\n"+
+        error;
+
+    }
+
+  }else{
+
+    bar.style.width="100%";
+
+    output.textContent=
+      ">> QUERY RECEIVED\n\n"+
+      text+
+      "\n\n"+
+      "現在このバージョンで取得できる"+
+      "リアルタイム情報は天気です。\n\n"+
+      "例：\n"+
+      "「東京の天気は？」\n"+
+      "「大阪の気温は？」\n"+
+      "「札幌は雨？」";
+
+  }
+
+  setTimeout(function(){
+
+    bar.style.width="0%";
+
+  },1000);
+
+}
+
+
+// ======================
+// 音声読み上げ
+// ======================
+
+function speak(text){
+
+  if(!("speechSynthesis" in window)) return;
+
+  speechSynthesis.cancel();
+
+  const utterance=
+    new SpeechSynthesisUtterance(text);
+
+  utterance.lang="ja-JP";
+  utterance.rate=1.0;
+  utterance.pitch=1.0;
+
+  speechSynthesis.speak(utterance);
+
+}
+
+
+// ======================
+
+function wait(ms){
+
+  return new Promise(
+    resolve=>setTimeout(resolve,ms)
+  );
+
+}
+
+q.addEventListener(
+  "keydown",
+  function(e){
+
+    if(e.key==="Enter"){
+      analyze();
+    }
+
+  }
+);
+
 </script>
 
 </body>
