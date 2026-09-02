@@ -6,7 +6,9 @@
 <title>TACTICAL AI // JAPAN</title>
 
 <style>
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
 
 body{
   margin:0;
@@ -76,6 +78,7 @@ input{
   border:1px solid #1d7f43;
   border-radius:5px;
   outline:none;
+  font-family:inherit;
 }
 
 button{
@@ -86,6 +89,7 @@ button{
   padding:11px 13px;
   margin:4px;
   font-family:inherit;
+  cursor:pointer;
 }
 
 button:active{
@@ -138,10 +142,50 @@ button:active{
   color:#43ff88;
 }
 
+.cameraImageBox{
+  border:1px solid #1d7f43;
+  padding:5px;
+  margin-top:10px;
+  background:#000;
+}
+
+.cameraImage{
+  display:block;
+  width:100%;
+  height:auto;
+  min-height:180px;
+  object-fit:contain;
+  background:#000;
+}
+
+.cameraLiveBadge{
+  padding:6px 8px;
+  font-size:11px;
+  border-bottom:1px solid #164d2b;
+  margin-bottom:5px;
+}
+
+.cameraError{
+  padding:15px;
+  border:1px solid #806f1d;
+  color:#ffe66d;
+  line-height:1.6;
+}
+
 @media(max-width:600px){
+
   .grid{
     grid-template-columns:1fr 1fr;
   }
+
+  .row{
+    flex-direction:column;
+  }
+
+  .row button{
+    width:calc(100% - 8px);
+  }
+
 }
 </style>
 </head>
@@ -150,14 +194,23 @@ button:active{
 
 <div class="container">
 
+<!-- HEADER -->
+
 <div class="header">
-  <div class="logo">TACTICAL AI // JAPAN</div>
-  <div class="sub">NATIONAL INFORMATION TERMINAL</div>
+
+  <div class="logo">
+    TACTICAL AI // JAPAN
+  </div>
+
+  <div class="sub">
+    NATIONAL INFORMATION TERMINAL
+  </div>
 
   <div class="status">
     <span class="dot"></span>
     SYSTEM ONLINE
   </div>
+
 </div>
 
 
@@ -165,15 +218,30 @@ button:active{
 
 <div class="panel">
 
-  <div class="title">// TACTICAL AI</div>
-
-  <div class="row">
-    <input id="query" placeholder="質問を入力...">
-    <button onclick="analyze()">ANALYZE</button>
+  <div class="title">
+    // TACTICAL AI
   </div>
 
-  <button onclick="startVoice()">🎙 VOICE</button>
-  <button onclick="speakResult()">🔊 SPEAK</button>
+  <div class="row">
+
+    <input
+      id="query"
+      placeholder="質問を入力..."
+    >
+
+    <button onclick="analyze()">
+      ANALYZE
+    </button>
+
+  </div>
+
+  <button onclick="startVoice()">
+    🎙 VOICE
+  </button>
+
+  <button onclick="speakResult()">
+    🔊 SPEAK
+  </button>
 
   <div id="result" class="result">
 SYSTEM READY...
@@ -186,7 +254,9 @@ SYSTEM READY...
 
 <div class="panel">
 
-  <div class="title">// WEATHER</div>
+  <div class="title">
+    // WEATHER
+  </div>
 
   <button onclick="getWeather()">
     WEATHER SCAN
@@ -199,7 +269,7 @@ READY.
 </div>
 
 
-<!-- CAMERA -->
+<!-- CAMERA NETWORK -->
 
 <div class="panel">
 
@@ -232,7 +302,6 @@ READY.
 
 </div>
 
-
 </div>
 
 
@@ -244,60 +313,60 @@ READY.
 
 const prefectures = [
 
-"北海道",
-"青森県",
-"岩手県",
-"宮城県",
-"秋田県",
-"山形県",
-"福島県",
+  "北海道",
+  "青森県",
+  "岩手県",
+  "宮城県",
+  "秋田県",
+  "山形県",
+  "福島県",
 
-"茨城県",
-"栃木県",
-"群馬県",
-"埼玉県",
-"千葉県",
-"東京都",
-"神奈川県",
+  "茨城県",
+  "栃木県",
+  "群馬県",
+  "埼玉県",
+  "千葉県",
+  "東京都",
+  "神奈川県",
 
-"新潟県",
-"富山県",
-"石川県",
-"福井県",
-"山梨県",
-"長野県",
+  "新潟県",
+  "富山県",
+  "石川県",
+  "福井県",
+  "山梨県",
+  "長野県",
 
-"岐阜県",
-"静岡県",
-"愛知県",
-"三重県",
+  "岐阜県",
+  "静岡県",
+  "愛知県",
+  "三重県",
 
-"滋賀県",
-"京都府",
-"大阪府",
-"兵庫県",
-"奈良県",
-"和歌山県",
+  "滋賀県",
+  "京都府",
+  "大阪府",
+  "兵庫県",
+  "奈良県",
+  "和歌山県",
 
-"鳥取県",
-"島根県",
-"岡山県",
-"広島県",
-"山口県",
+  "鳥取県",
+  "島根県",
+  "岡山県",
+  "広島県",
+  "山口県",
 
-"徳島県",
-"香川県",
-"愛媛県",
-"高知県",
+  "徳島県",
+  "香川県",
+  "愛媛県",
+  "高知県",
 
-"福岡県",
-"佐賀県",
-"長崎県",
-"熊本県",
-"大分県",
-"宮崎県",
-"鹿児島県",
-"沖縄県"
+  "福岡県",
+  "佐賀県",
+  "長崎県",
+  "熊本県",
+  "大分県",
+  "宮崎県",
+  "鹿児島県",
+  "沖縄県"
 
 ];
 
@@ -308,251 +377,258 @@ const prefectures = [
 
 const cameraData = {
 
-"新潟県":{
+  "新潟県":{
 
-  "佐渡市":[
+    "佐渡市":[
 
-    {
-      name:"大野亀",
-      type:"地域カメラ",
-      update:"約1分間隔",
-      source:
-      "新潟県佐渡市公式"
-    },
+      /*
+       * 実画像URLを確認できたカメラ
+       */
 
-    {
-      name:"岩谷口",
-      type:"地域カメラ",
-      update:"約1分間隔",
-      source:
-      "新潟県佐渡市公式"
-    },
+      {
+        name:"佐渡市大小",
+        type:"一般道カメラ",
+        update:"約2分間隔",
+        source:"にいがたLIVEカメラ / 新潟県土木部",
 
-    {
-      name:"入川",
-      type:"地域カメラ",
-      update:"約1分間隔",
-      source:
-      "新潟県佐渡市公式"
-    },
+        image:
+        "https://www.live-cam.pref.niigata.jp/camera/pc/daisyou.jpeg"
 
-    {
-      name:"姫津",
-      type:"地域カメラ",
-      update:"約1分間隔",
-      source:
-      "新潟県佐渡市公式"
-    },
+      },
 
-    {
-      name:"浦川",
-      type:"地域カメラ",
-      update:"約1分間隔",
-      source:
-      "新潟県佐渡市公式"
-    },
 
-    {
-      name:"吉住",
-      type:"地域カメラ",
-      update:"約1分間隔",
-      source:
-      "新潟県佐渡市公式"
-    },
+      /*
+       * 以下は登録情報のみ。
+       * 直接画像URLは勝手に設定していません。
+       */
 
-    {
-      name:"両津大川",
-      type:"地域カメラ",
-      update:"約1分間隔",
-      source:
-      "新潟県佐渡市公式"
-    },
+      {
+        name:"大野亀",
+        type:"地域カメラ",
+        update:"約1分間隔",
+        source:"佐渡市公式"
+      },
 
-    {
-      name:"新穂ダム",
-      type:"地域カメラ",
-      update:"約1分間隔",
-      source:
-      "新潟県佐渡市公式"
-    },
+      {
+        name:"岩谷口",
+        type:"地域カメラ",
+        update:"約1分間隔",
+        source:"佐渡市公式"
+      },
 
-    {
-      name:"赤玉",
-      type:"地域カメラ",
-      update:"約1分間隔",
-      source:
-      "新潟県佐渡市公式"
-    },
+      {
+        name:"入川",
+        type:"地域カメラ",
+        update:"約1分間隔",
+        source:"佐渡市公式"
+      },
 
-    {
-      name:"松ヶ崎",
-      type:"地域カメラ",
-      update:"約1分間隔",
-      source:
-      "新潟県佐渡市公式"
-    },
+      {
+        name:"姫津",
+        type:"地域カメラ",
+        update:"約1分間隔",
+        source:"佐渡市公式"
+      },
 
-    {
-      name:"赤泊港",
-      type:"地域カメラ",
-      update:"約1分間隔",
-      source:
-      "新潟県佐渡市公式"
-    },
+      {
+        name:"浦川",
+        type:"地域カメラ",
+        update:"約1分間隔",
+        source:"佐渡市公式"
+      },
 
-    {
-      name:"小木港",
-      type:"地域カメラ",
-      update:"約1分間隔",
-      source:
-      "新潟県佐渡市公式"
-    },
+      {
+        name:"吉住",
+        type:"地域カメラ",
+        update:"約1分間隔",
+        source:"佐渡市公式"
+      },
 
-    {
-      name:"沢崎",
-      type:"地域カメラ",
-      update:"約1分間隔",
-      source:
-      "新潟県佐渡市公式"
-    },
+      {
+        name:"両津大川",
+        type:"地域カメラ",
+        update:"約1分間隔",
+        source:"佐渡市公式"
+      },
 
-    {
-      name:"木流",
-      type:"地域カメラ",
-      update:"約1分間隔",
-      source:
-      "新潟県佐渡市公式"
-    },
+      {
+        name:"新穂ダム",
+        type:"地域カメラ",
+        update:"約1分間隔",
+        source:"佐渡市公式"
+      },
 
-    {
-      name:"二見港",
-      type:"地域カメラ",
-      update:"約1分間隔",
-      source:
-      "新潟県佐渡市公式"
-    },
+      {
+        name:"赤玉",
+        type:"地域カメラ",
+        update:"約1分間隔",
+        source:"佐渡市公式"
+      },
 
-    {
-      name:"背合",
-      type:"地域カメラ",
-      update:"約1分間隔",
-      source:
-      "新潟県佐渡市公式"
-    },
+      {
+        name:"松ヶ崎",
+        type:"地域カメラ",
+        update:"約1分間隔",
+        source:"佐渡市公式"
+      },
 
-    {
-      name:"八幡",
-      type:"地域カメラ",
-      update:"約1分間隔",
-      source:
-      "新潟県佐渡市公式"
-    }
+      {
+        name:"赤泊港",
+        type:"地域カメラ",
+        update:"約1分間隔",
+        source:"佐渡市公式"
+      },
 
-  ],
+      {
+        name:"小木港",
+        type:"地域カメラ",
+        update:"約1分間隔",
+        source:"佐渡市公式"
+      },
 
-  "新潟市":[
+      {
+        name:"沢崎",
+        type:"地域カメラ",
+        update:"約1分間隔",
+        source:"佐渡市公式"
+      },
 
-    {
-      name:"国道7号 東堀前通",
-      type:"一般道カメラ",
-      update:"公式サイト",
-      source:"にいがたLIVEカメラ"
-    },
+      {
+        name:"木流",
+        type:"地域カメラ",
+        update:"約1分間隔",
+        source:"佐渡市公式"
+      },
 
-    {
-      name:"国道7号 競馬場IC",
-      type:"一般道カメラ",
-      update:"公式サイト",
-      source:"にいがたLIVEカメラ"
-    },
+      {
+        name:"二見港",
+        type:"地域カメラ",
+        update:"約1分間隔",
+        source:"佐渡市公式"
+      },
 
-    {
-      name:"国道7号 海老ヶ瀬IC",
-      type:"一般道カメラ",
-      update:"公式サイト",
-      source:"にいがたLIVEカメラ"
-    },
+      {
+        name:"背合",
+        type:"地域カメラ",
+        update:"約1分間隔",
+        source:"佐渡市公式"
+      },
 
-    {
-      name:"国道8号 桜木IC",
-      type:"一般道カメラ",
-      update:"公式サイト",
-      source:"にいがたLIVEカメラ"
-    },
+      {
+        name:"八幡",
+        type:"地域カメラ",
+        update:"約1分間隔",
+        source:"佐渡市公式"
+      }
 
-    {
-      name:"国道49号 姥ヶ山IC",
-      type:"一般道カメラ",
-      update:"公式サイト",
-      source:"にいがたLIVEカメラ"
-    },
+    ],
 
-    {
-      name:"国道116号 美咲町",
-      type:"一般道カメラ",
-      update:"公式サイト",
-      source:"にいがたLIVEカメラ"
-    }
 
-  ],
+    "新潟市":[
 
-  "村上市":[
+      {
+        name:"国道7号 東堀前通",
+        type:"一般道カメラ",
+        update:"公式サイト",
+        source:"にいがたLIVEカメラ"
+      },
 
-    {
-      name:"国道7号 潟端",
-      type:"一般道カメラ",
-      update:"公式サイト",
-      source:"にいがたLIVEカメラ"
-    },
+      {
+        name:"国道7号 競馬場IC",
+        type:"一般道カメラ",
+        update:"公式サイト",
+        source:"にいがたLIVEカメラ"
+      },
 
-    {
-      name:"国道7号 猿沢",
-      type:"一般道カメラ",
-      update:"公式サイト",
-      source:"にいがたLIVEカメラ"
-    },
+      {
+        name:"国道7号 海老ヶ瀬IC",
+        type:"一般道カメラ",
+        update:"公式サイト",
+        source:"にいがたLIVEカメラ"
+      },
 
-    {
-      name:"国道7号 大須戸",
-      type:"一般道カメラ",
-      update:"公式サイト",
-      source:"にいがたLIVEカメラ"
-    },
+      {
+        name:"国道8号 桜木IC",
+        type:"一般道カメラ",
+        update:"公式サイト",
+        source:"にいがたLIVEカメラ"
+      },
 
-    {
-      name:"国道345号 寒川",
-      type:"一般道カメラ",
-      update:"公式サイト",
-      source:"にいがたLIVEカメラ"
-    }
+      {
+        name:"国道49号 姥ヶ山IC",
+        type:"一般道カメラ",
+        update:"公式サイト",
+        source:"にいがたLIVEカメラ"
+      },
 
-  ],
+      {
+        name:"国道116号 美咲町",
+        type:"一般道カメラ",
+        update:"公式サイト",
+        source:"にいがたLIVEカメラ"
+      }
 
-  "燕市":[
+    ],
 
-    {
-      name:"国道116号 新橋",
-      type:"一般道カメラ",
-      update:"公式サイト",
-      source:"にいがたLIVEカメラ"
-    },
 
-    {
-      name:"国道116号 見晴橋",
-      type:"一般道カメラ",
-      update:"公式サイト",
-      source:"にいがたLIVEカメラ"
-    }
+    "村上市":[
 
-  ]
+      {
+        name:"国道7号 潟端",
+        type:"一般道カメラ",
+        update:"公式サイト",
+        source:"にいがたLIVEカメラ"
+      },
 
-}
+      {
+        name:"国道7号 猿沢",
+        type:"一般道カメラ",
+        update:"公式サイト",
+        source:"にいがたLIVEカメラ"
+      },
+
+      {
+        name:"国道7号 大須戸",
+        type:"一般道カメラ",
+        update:"公式サイト",
+        source:"にいがたLIVEカメラ"
+      },
+
+      {
+        name:"国道345号 寒川",
+        type:"一般道カメラ",
+        update:"公式サイト",
+        source:"にいがたLIVEカメラ"
+      }
+
+    ],
+
+
+    "燕市":[
+
+      {
+        name:"国道116号 新橋",
+        type:"一般道カメラ",
+        update:"公式サイト",
+        source:"にいがたLIVEカメラ"
+      },
+
+      {
+        name:"国道116号 見晴橋",
+        type:"一般道カメラ",
+        update:"公式サイト",
+        source:"にいがたLIVEカメラ"
+      }
+
+    ]
+
+  }
 
 };
 
 
 /* =====================================================
-   都道府県
+   都道府県一覧
 ===================================================== */
 
 function showPrefectures(){
@@ -718,8 +794,11 @@ function showCameras(pref,city){
 
 
 /* =====================================================
-   カメラ詳細
+   カメラ表示
 ===================================================== */
+
+let currentCamera=null;
+
 
 function showCamera(camera,pref,city){
 
@@ -730,7 +809,74 @@ function showCamera(camera,pref,city){
     document.getElementById("cameraInfo");
 
 
+  currentCamera=camera;
+
   view.style.display="block";
+
+
+  let imageHTML="";
+
+
+  if(camera.image){
+
+    imageHTML=`
+
+      <div class="cameraImageBox">
+
+        <div class="cameraLiveBadge">
+
+          <span class="live">
+            ● LIVE IMAGE
+          </span>
+
+          &nbsp; // OFFICIAL CAMERA
+
+        </div>
+
+
+        <img
+          class="cameraImage"
+          id="liveCameraImage"
+          src="${camera.image}?t=${Date.now()}"
+          alt="${camera.name}"
+          onerror="cameraImageError()"
+        >
+
+      </div>
+
+    `;
+
+  }else{
+
+    imageHTML=`
+
+      <div class="cameraError">
+
+        ⚠ LIVE IMAGE NOT AVAILABLE
+
+        <br><br>
+
+        このカメラは公式情報として
+        登録されています。
+
+        <br><br>
+
+        ただし、TACTICAL AIから直接表示できる
+        画像URLを確認できていないため、
+        安全のため直接埋め込みを行っていません。
+
+        <br><br>
+
+        CAMERA STATUS :
+        <span class="live">
+          OFFICIAL SOURCE VERIFIED
+        </span>
+
+      </div>
+
+    `;
+
+  }
 
 
   info.innerHTML=`
@@ -738,7 +884,7 @@ function showCamera(camera,pref,city){
     <div class="cameraBox">
 
       <div class="live">
-        ● CAMERA REGISTERED
+        ● CAMERA ONLINE
       </div>
 
       <br>
@@ -767,32 +913,24 @@ function showCamera(camera,pref,city){
 
     </div>
 
-    <br>
 
-    <div class="cameraStatus">
+    ${imageHTML}
 
-      ⚠ LIVE IMAGE DISPLAY
 
-      <br><br>
-
-      このカメラは公式サイトで公開されている
-      ライブカメラです。
-
-      <br><br>
-
-      ただし、提供元が画像の直接埋め込みを
-      許可しているか確認できないため、
-      TACTICAL AIから画像URLを勝手に
-      抜き出して表示する処理は行っていません。
-
-      <br><br>
-
-      CAMERA STATUS :
-      <span class="live">
-      OFFICIAL SOURCE VERIFIED
-      </span>
-
-    </div>
+    ${
+      camera.image
+      ?
+      `
+      <button
+        class="full"
+        onclick="refreshCamera()"
+      >
+        ↻ REFRESH CAMERA
+      </button>
+      `
+      :
+      ""
+    }
 
   `;
 
@@ -800,6 +938,69 @@ function showCamera(camera,pref,city){
   view.scrollIntoView({
     behavior:"smooth"
   });
+
+}
+
+
+/* =====================================================
+   カメラ画像エラー
+===================================================== */
+
+function cameraImageError(){
+
+  const img=
+    document.getElementById(
+      "liveCameraImage"
+    );
+
+  if(!img) return;
+
+
+  img.outerHTML=`
+
+    <div class="cameraError">
+
+      ⚠ CAMERA CONNECTION ERROR
+
+      <br><br>
+
+      画像サーバーから画像を
+      取得できませんでした。
+
+      <br><br>
+
+      CAMERA STATUS :
+      <span class="live">
+        SOURCE REGISTERED
+      </span>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =====================================================
+   カメラ更新
+===================================================== */
+
+function refreshCamera(){
+
+  const img=
+    document.getElementById(
+      "liveCameraImage"
+    );
+
+  if(!img) return;
+
+
+  const base=
+    img.src.split("?")[0];
+
+
+  img.src=
+    base+"?t="+Date.now();
 
 }
 
@@ -814,6 +1015,7 @@ function startVoice(){
     window.SpeechRecognition ||
     window.webkitSpeechRecognition;
 
+
   if(!SpeechRecognition){
 
     alert(
@@ -827,6 +1029,7 @@ function startVoice(){
 
   const recognition=
     new SpeechRecognition();
+
 
   recognition.lang="ja-JP";
 
@@ -850,9 +1053,11 @@ function startVoice(){
     const text=
       event.results[0][0].transcript;
 
+
     document.getElementById(
       "query"
     ).value=text;
+
 
     analyze();
 
@@ -885,6 +1090,7 @@ function analyze(){
       "query"
     ).value.trim();
 
+
   const result=
     document.getElementById(
       "result"
@@ -916,7 +1122,7 @@ function analyze(){
 
 
     if(
-      input.includes("カメラ")||
+      input.includes("カメラ") ||
       input.includes("ライブ")
     ){
 
@@ -929,7 +1135,7 @@ function analyze(){
 
 
     if(
-      input.includes("天気")||
+      input.includes("天気") ||
       input.includes("気温")
     ){
 
@@ -940,7 +1146,8 @@ function analyze(){
     }
 
 
-    result.textContent=answer;
+    result.textContent=
+      answer;
 
   },700);
 
@@ -957,6 +1164,7 @@ function speakResult(){
     document.getElementById(
       "result"
     ).textContent;
+
 
   if(!("speechSynthesis" in window)){
 
@@ -975,9 +1183,13 @@ function speakResult(){
   const speech=
     new SpeechSynthesisUtterance(text);
 
+
   speech.lang="ja-JP";
+
   speech.rate=1;
+
   speech.pitch=.9;
+
 
   speechSynthesis.speak(speech);
 
@@ -1013,8 +1225,15 @@ async function getWeather(){
     const response=
       await fetch(url);
 
+
+    if(!response.ok){
+      throw new Error("Weather API error");
+    }
+
+
     const data=
       await response.json();
+
 
     const c=
       data.current;
