@@ -8,49 +8,47 @@
 <style>
 *{box-sizing:border-box}
 
-html,body{
-  margin:0;
-  min-height:100%;
-  background:#020604;
-  color:#72ff9b;
-  font-family:monospace;
-}
-
 body{
-  overflow-x:hidden;
-}
-
-body:before{
-  content:"";
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  background:
-    linear-gradient(rgba(80,255,130,.035) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(80,255,130,.035) 1px,transparent 1px);
-  background-size:24px 24px;
-}
-
-.app{
-  max-width:700px;
-  margin:auto;
-  padding:18px;
-}
-
-header{
-  border-bottom:1px solid #245e38;
-  padding:12px 0 16px;
-}
-
-h1{
   margin:0;
-  font-size:22px;
-  letter-spacing:3px;
+  padding:10px;
+  background:#020604;
+  color:#43ff88;
+  font-family:"Courier New",monospace;
+}
+
+.container{
+  max-width:900px;
+  margin:auto;
+}
+
+.panel{
+  border:1px solid #1d7f43;
+  background:#030a06;
+  padding:12px;
+  margin-bottom:10px;
+}
+
+.header{
+  border:1px solid #1d7f43;
+  padding:15px;
+  margin-bottom:10px;
+}
+
+.logo{
+  font-size:21px;
+  font-weight:bold;
+  letter-spacing:2px;
+}
+
+.sub{
+  font-size:11px;
+  opacity:.65;
+  margin-top:5px;
 }
 
 .status{
-  margin-top:8px;
-  font-size:11px;
+  margin-top:10px;
+  font-size:12px;
 }
 
 .dot{
@@ -58,1372 +56,193 @@ h1{
   width:8px;
   height:8px;
   border-radius:50%;
-  background:#48ff80;
-  box-shadow:0 0 10px #48ff80;
-  margin-right:6px;
+  background:#43ff88;
+  box-shadow:0 0 10px #43ff88;
+  margin-right:5px;
 }
 
-.panel{
-  border:1px solid #205f38;
-  background:rgba(0,20,8,.85);
-  padding:14px;
-  margin-top:14px;
-}
-
-.label{
-  color:#42b866;
-  font-size:10px;
+.title{
+  font-size:12px;
+  border-bottom:1px solid #164d2b;
+  padding-bottom:7px;
   margin-bottom:10px;
-  letter-spacing:1px;
 }
 
 input{
   width:100%;
-  padding:14px;
-  background:#010a04;
-  border:1px solid #287a46;
-  color:#9affb5;
-  font:14px monospace;
+  padding:12px;
+  background:#020604;
+  color:#43ff88;
+  border:1px solid #1d7f43;
+  border-radius:5px;
   outline:none;
 }
 
 button{
-  width:100%;
-  padding:14px;
-  margin-top:10px;
-  background:#092a15;
-  color:#72ff9b;
-  border:1px solid #39c96b;
-  font:bold 13px monospace;
+  background:#06130b;
+  color:#43ff88;
+  border:1px solid #1d7f43;
+  border-radius:5px;
+  padding:11px 13px;
+  margin:4px;
+  font-family:inherit;
 }
 
 button:active{
-  transform:scale(.98);
-  background:#124b25;
+  transform:scale(.97);
 }
 
-#output{
-  min-height:180px;
+.row{
+  display:flex;
+  gap:5px;
+}
+
+.row input{
+  flex:1;
+}
+
+.result{
   white-space:pre-wrap;
-  line-height:1.7;
-  font-size:13px;
+  line-height:1.6;
+  margin-top:10px;
 }
 
 .grid{
   display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
+  grid-template-columns:repeat(2,1fr);
 }
 
-.box{
-  border:1px solid #194a2b;
-  padding:10px;
-  font-size:11px;
-}
-
-.value{
-  font-size:14px;
-  margin-top:5px;
-}
-
-.bar{
-  height:6px;
-  background:#092512;
-  margin-top:8px;
-}
-
-.bar span{
-  display:block;
-  height:100%;
-  width:0;
-  background:#48ff80;
-  box-shadow:0 0 10px #48ff80;
-  transition:width .4s;
-}
-
-.link{
-  display:block;
-  text-decoration:none;
-  color:#72ff9b;
-  border:1px solid #194a2b;
-  padding:12px;
-  margin-top:8px;
-  background:#031008;
-}
-
-.link:active{
-  background:#0b2b17;
+.full{
+  width:calc(100% - 8px);
 }
 
 .small{
-  color:#42b866;
-  font-size:10px;
+  font-size:11px;
+  opacity:.7;
 }
 
-.camera-title{
-  margin-top:14px;
-  color:#72ff9b;
-  font-size:13px;
-  border-bottom:1px solid #194a2b;
-  padding-bottom:8px;
+.cameraBox{
+  border:1px solid #1d7f43;
+  padding:10px;
+  margin-top:10px;
 }
 
-.back{
-  margin-top:12px;
+.cameraStatus{
+  border:1px solid #806f1d;
+  color:#ffe66d;
+  padding:12px;
+  line-height:1.6;
 }
 
+.live{
+  color:#43ff88;
+}
+
+@media(max-width:600px){
+  .grid{
+    grid-template-columns:1fr 1fr;
+  }
+}
 </style>
 </head>
 
 <body>
 
-<div class="app">
+<div class="container">
 
-<header>
+<div class="header">
+  <div class="logo">TACTICAL AI // JAPAN</div>
+  <div class="sub">NATIONAL INFORMATION TERMINAL</div>
 
-<h1>TACTICAL AI // JAPAN</h1>
-
-<div class="status">
-<span class="dot"></span>
-SYSTEM ONLINE
+  <div class="status">
+    <span class="dot"></span>
+    SYSTEM ONLINE
+  </div>
 </div>
 
-</header>
 
-
-<!-- QUERY -->
+<!-- AI -->
 
 <div class="panel">
 
-<div class="label">
-VOICE / QUERY TERMINAL
-</div>
+  <div class="title">// TACTICAL AI</div>
 
-<input
-id="q"
-placeholder="例：東京の天気は？"
-autocomplete="off"
->
+  <div class="row">
+    <input id="query" placeholder="質問を入力...">
+    <button onclick="analyze()">ANALYZE</button>
+  </div>
 
-<button onclick="listen()">
-🎤 SPEAK
-</button>
+  <button onclick="startVoice()">🎙 VOICE</button>
+  <button onclick="speakResult()">🔊 SPEAK</button>
 
-<button onclick="analyze()">
-▶ ANALYZE
-</button>
+  <div id="result" class="result">
+SYSTEM READY...
+  </div>
 
 </div>
 
 
-<!-- OUTPUT -->
+<!-- WEATHER -->
 
 <div class="panel">
 
-<div class="label">
-ANALYSIS OUTPUT
+  <div class="title">// WEATHER</div>
+
+  <button onclick="getWeather()">
+    WEATHER SCAN
+  </button>
+
+  <div id="weather" class="result">
+READY.
+  </div>
+
 </div>
 
-<div id="output">
-TACTICAL AI SYSTEM READY.
 
-日本情報モジュール待機中...
-</div>
-
-</div>
-
-
-<!-- STATUS -->
+<!-- CAMERA -->
 
 <div class="panel">
 
-<div class="label">
-SYSTEM STATUS
-</div>
+  <div class="title">
+    // JAPAN LIVE CAMERA NETWORK
+  </div>
 
-<div class="grid">
+  <div id="cameraPath" class="small">
+    JAPAN / ALL PREFECTURES
+  </div>
 
-<div class="box">
-NETWORK
-<div class="value" id="network">
-READY
-</div>
-</div>
-
-<div class="box">
-DATA
-<div class="value" id="data">
-STANDBY
-</div>
-</div>
-
-<div class="box">
-LOCATION
-<div class="value" id="location">
-JAPAN
-</div>
-</div>
-
-<div class="box">
-VOICE
-<div class="value">
-ACTIVE
-</div>
-</div>
-
-</div>
+  <div id="cameraMenu" class="grid"></div>
 
 </div>
 
 
-<!-- PROCESSING -->
-
-<div class="panel">
-
-<div class="label">
-PROCESSING
-</div>
-
-<div class="bar">
-<span id="bar"></span>
-</div>
-
-</div>
-
-
-<!-- ========================= -->
-<!-- JAPAN LIVE CAMERA -->
-<!-- ========================= -->
-
-<div class="panel">
-
-<div class="label">
-🇯🇵 JAPAN LIVE CAMERA NETWORK
-</div>
-
-<div class="small">
-全国の公開ライブカメラを地域から選択
-</div>
-
-<div id="cameraMenu"></div>
-
-<div id="cameraView" style="display:none">
+<!-- CAMERA VIEW -->
 
 <div
-id="cameraTitle"
-class="camera-title">
-</div>
-
-<div id="cameraLinks"></div>
-
-</div>
-
-</div>
-
-
-<!-- ========================= -->
-<!-- NEWS -->
-<!-- ========================= -->
-
-<div class="panel">
-
-<div class="label">
-NEWS / INFORMATION
-</div>
-
-<div class="small">
-日本の公式情報源
-</div>
-
-<a
-class="link"
-href="https://www3.nhk.or.jp/news/"
-target="_blank"
+  id="cameraView"
+  class="panel"
+  style="display:none"
 >
-📰 NHK NEWS
-</a>
 
-<a
-class="link"
-href="https://www.jma.go.jp/bosai/"
-target="_blank"
->
-🌦️ 気象庁 防災情報
-</a>
+  <div class="title">
+    // CAMERA INTELLIGENCE
+  </div>
 
-<a
-class="link"
-href="https://www.jartic.or.jp/"
-target="_blank"
->
-🚦 日本道路交通情報センター
-</a>
+  <div id="cameraInfo"></div>
 
 </div>
 
-
-<!-- ========================= -->
-<!-- RESULT -->
-<!-- ========================= -->
-
-<div class="panel">
-
-<div class="label">
-JAPAN DATA
-</div>
-
-<div id="info">
-情報取得待機中...
-</div>
-
-</div>
 
 </div>
 
 
 <script>
 
-
-// ==========================================
-// 基本
-// ==========================================
-
-const q=document.getElementById("q");
-
-const output=
-document.getElementById("output");
-
-const bar=
-document.getElementById("bar");
-
-const network=
-document.getElementById("network");
-
-const data=
-document.getElementById("data");
-
-const info=
-document.getElementById("info");
-
-const locationBox=
-document.getElementById("location");
-
-
-// ==========================================
-// 音声認識
-// ==========================================
-
-function listen(){
-
-const SpeechRecognition=
-window.SpeechRecognition ||
-window.webkitSpeechRecognition;
-
-if(!SpeechRecognition){
-
-output.textContent=
-"VOICE ERROR\n\n"+
-"このブラウザでは音声認識が利用できません。";
-
-return;
-
-}
-
-const recognition=
-new SpeechRecognition();
-
-recognition.lang="ja-JP";
-
-recognition.interimResults=false;
-
-recognition.continuous=false;
-
-output.textContent=
-">> VOICE SYSTEM\n\n"+
-"LISTENING...\n\n"+
-"話しかけてください。";
-
-recognition.start();
-
-
-recognition.onresult=function(event){
-
-const text=
-event.results[0][0].transcript;
-
-q.value=text;
-
-output.textContent=
-">> VOICE RECEIVED\n\n"+
-"QUERY : "+text+
-"\n\n>> ANALYZING...";
-
-analyze();
-
-};
-
-
-recognition.onerror=function(){
-
-output.textContent=
-"VOICE ERROR\n\n"+
-"音声を認識できませんでした。";
-
-};
-
-}
-
-
-// ==========================================
-// 都市データ
-// ==========================================
-
-function getCity(text){
-
-const cities={
-
-東京:[35.6762,139.6503],
-
-大阪:[34.6937,135.5023],
-
-京都:[35.0116,135.7681],
-
-名古屋:[35.1815,136.9066],
-
-札幌:[43.0618,141.3545],
-
-福岡:[33.5904,130.4017],
-
-仙台:[38.2682,140.8694],
-
-広島:[34.3853,132.4553],
-
-横浜:[35.4437,139.6380],
-
-那覇:[26.2124,127.6809],
-
-函館:[41.7687,140.7291],
-
-小樽:[43.1907,140.9947],
-
-青森:[40.8246,140.7400],
-
-盛岡:[39.7036,141.1527],
-
-秋田:[39.7200,140.1025],
-
-山形:[38.2554,140.3396],
-
-福島:[37.7608,140.4747],
-
-水戸:[36.3418,140.4468],
-
-宇都宮:[36.5551,139.8828],
-
-前橋:[36.3895,139.0634],
-
-さいたま:[35.8617,139.6455],
-
-千葉:[35.6073,140.1063],
-
-甲府:[35.6642,138.5684],
-
-長野:[36.6513,138.1810],
-
-富山:[36.6953,137.2113],
-
-金沢:[36.5947,136.6256],
-
-福井:[36.0652,136.2216],
-
-岐阜:[35.4233,136.7607],
-
-静岡:[34.9756,138.3828],
-
-津:[34.7303,136.5086],
-
-大津:[35.0179,135.8546],
-
-神戸:[34.6901,135.1956],
-
-奈良:[34.6851,135.8048],
-
-和歌山:[34.2260,135.1675],
-
-鳥取:[35.5039,134.2377],
-
-松江:[35.4723,133.0505],
-
-岡山:[34.6618,133.9344],
-
-山口:[34.1861,131.4705],
-
-徳島:[34.0658,134.5593],
-
-高松:[34.3401,134.0434],
-
-松山:[33.8416,132.7657],
-
-高知:[33.5597,133.5311],
-
-佐賀:[33.2494,130.2988],
-
-長崎:[32.7448,129.8737],
-
-熊本:[32.7898,130.7417],
-
-大分:[33.2382,131.6126],
-
-宮崎:[31.9111,131.4239],
-
-鹿児島:[31.5602,130.5581]
-
-};
-
-for(const city in cities){
-
-if(text.includes(city)){
-
-return{
-
-name:city,
-
-lat:cities[city][0],
-
-lon:cities[city][1]
-
-};
-
-}
-
-}
-
-return{
-
-name:"東京",
-
-lat:35.6762,
-
-lon:139.6503
-
-};
-
-}
-
-
-// ==========================================
-// 天気
-// ==========================================
-
-function weatherText(code){
-
-const list={
-
-0:"快晴",
-
-1:"晴れ",
-
-2:"一部曇り",
-
-3:"曇り",
-
-45:"霧",
-
-48:"霧",
-
-51:"弱い霧雨",
-
-53:"霧雨",
-
-55:"強い霧雨",
-
-61:"弱い雨",
-
-63:"雨",
-
-65:"強い雨",
-
-71:"弱い雪",
-
-73:"雪",
-
-75:"強い雪",
-
-80:"にわか雨",
-
-81:"雨",
-
-82:"強いにわか雨",
-
-95:"雷雨",
-
-96:"雷雨",
-
-99:"強い雷雨"
-
-};
-
-return list[code]||"不明";
-
-}
-
-
-// ==========================================
-// 天気API
-// ==========================================
-
-async function getWeather(city){
-
-const url=
-
-"https://api.open-meteo.com/v1/forecast"+
-"?latitude="+city.lat+
-"&longitude="+city.lon+
-"&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m"+
-"&timezone=Asia%2FTokyo";
-
-const response=
-await fetch(url);
-
-if(!response.ok){
-
-throw new Error("API ERROR");
-
-}
-
-return await response.json();
-
-}
-
-
-// ==========================================
-// ライブカメラデータ
-// ==========================================
-
-const cameraData={
-
-
-// 北海道
-"北海道":{
-
-"札幌市":[
-
-[
-"北海道開発局 道路情報",
-"https://www.hkd.mlit.go.jp/"
-]
-
-],
-
-"函館市":[
-
-[
-"函館海上保安部 ライブカメラ",
-"https://www6.kaiho.mlit.go.jp/01kanku/hakodate/livecamera.html"
-]
-
-],
-
-"小樽市":[
-
-[
-"小樽海上保安部",
-"https://www6.kaiho.mlit.go.jp/01kanku/otaru/"
-]
-
-],
-
-"網走市":[
-
-[
-"網走開発建設部",
-"https://www.hkd.mlit.go.jp/ab/"
-]
-
-],
-
-"稚内市":[
-
-[
-"稚内開発建設部",
-"https://www.hkd.mlit.go.jp/wk/"
-]
-
-]
-
-},
-
-
-// 青森
-"青森県":{
-
-"青森市":[
-
-[
-"青森海上保安部",
-"https://www6.kaiho.mlit.go.jp/02kanku/aomori/"
-]
-
-]
-
-},
-
-
-// 岩手
-"岩手県":{
-
-"盛岡市":[
-
-[
-"岩手河川国道事務所",
-"https://www.thr.mlit.go.jp/iwate/"
-]
-
-]
-
-},
-
-
-// 宮城
-"宮城県":{
-
-"仙台市":[
-
-[
-"仙台河川国道事務所",
-"https://www.thr.mlit.go.jp/sendai/"
-]
-
-]
-
-},
-
-
-// 秋田
-"秋田県":{
-
-"秋田市":[
-
-[
-"秋田河川国道事務所",
-"https://www.thr.mlit.go.jp/akita/"
-]
-
-]
-
-},
-
-
-// 山形
-"山形県":{
-
-"山形市":[
-
-[
-"山形河川国道事務所",
-"https://www.thr.mlit.go.jp/yamagata/"
-]
-
-]
-
-},
-
-
-// 福島
-"福島県":{
-
-"福島市":[
-
-[
-"福島河川国道事務所",
-"https://www.thr.mlit.go.jp/fukushima/"
-]
-
-]
-
-},
-
-
-// 新潟
-"新潟県":{
-
-"新潟市":[
-
-[
-"北陸地方整備局 道路CCTV",
-"https://www.hrr.mlit.go.jp/road/cctvclip/"
-]
-
-],
-
-"村上市":[
-
-[
-"道路CCTV",
-"https://www.hrr.mlit.go.jp/road/cctvclip/"
-]
-
-],
-
-"湯沢町":[
-
-[
-"道路CCTV",
-"https://www.hrr.mlit.go.jp/road/cctvclip/"
-]
-
-]
-
-},
-
-
-// 富山
-"富山県":{
-
-"富山市":[
-
-[
-"富山河川国道事務所",
-"https://www.hrr.mlit.go.jp/toyama/"
-]
-
-]
-
-},
-
-
-// 石川
-"石川県":{
-
-"金沢市":[
-
-[
-"金沢河川国道事務所",
-"https://www.hrr.mlit.go.jp/kanazawa/"
-]
-
-]
-
-},
-
-
-// 福井
-"福井県":{
-
-"福井市":[
-
-[
-"福井河川国道事務所",
-"https://www.hrr.mlit.go.jp/fukui/"
-]
-
-]
-
-},
-
-
-// 茨城
-"茨城県":{
-
-"水戸市":[
-
-[
-"常陸河川国道事務所",
-"https://www.ktr.mlit.go.jp/hitachi/"
-]
-
-]
-
-},
-
-
-// 栃木
-"栃木県":{
-
-"宇都宮市":[
-
-[
-"宇都宮国道事務所",
-"https://www.ktr.mlit.go.jp/utunomiya/"
-]
-
-]
-
-},
-
-
-// 群馬
-"群馬県":{
-
-"前橋市":[
-
-[
-"高崎河川国道事務所",
-"https://www.ktr.mlit.go.jp/takasaki/"
-]
-
-]
-
-},
-
-
-// 埼玉
-"埼玉県":{
-
-"さいたま市":[
-
-[
-"大宮国道事務所",
-"https://www.ktr.mlit.go.jp/oomiya/"
-]
-
-]
-
-},
-
-
-// 千葉
-"千葉県":{
-
-"千葉市":[
-
-[
-"千葉国道事務所",
-"https://www.ktr.mlit.go.jp/chiba/"
-]
-
-]
-
-},
-
-
-// 東京
-"東京都":{
-
-"東京":[
-
-[
-"東京国道事務所",
-"https://www.ktr.mlit.go.jp/toukoku/"
-]
-
-]
-
-},
-
-
-// 神奈川
-"神奈川県":{
-
-"横浜市":[
-
-[
-"横浜国道事務所",
-"https://www.ktr.mlit.go.jp/yokohama/"
-]
-
-]
-
-},
-
-
-// 山梨
-"山梨県":{
-
-"甲府市":[
-
-[
-"甲府河川国道事務所",
-"https://www.ktr.mlit.go.jp/koufu/"
-]
-
-]
-
-},
-
-
-// 長野
-"長野県":{
-
-"長野市":[
-
-[
-"長野国道事務所",
-"https://www.hrr.mlit.go.jp/nagano/"
-]
-
-]
-
-},
-
-
-// 岐阜
-"岐阜県":{
-
-"岐阜市":[
-
-[
-"岐阜国道事務所",
-"https://www.cbr.mlit.go.jp/gifu/"
-]
-
-]
-
-},
-
-
-// 静岡
-"静岡県":{
-
-"静岡市":[
-
-[
-"静岡国道事務所",
-"https://www.cbr.mlit.go.jp/shizukoku/"
-]
-
-]
-
-},
-
-
-// 愛知
-"愛知県":{
-
-"名古屋市":[
-
-[
-"名古屋国道事務所",
-"https://www.cbr.mlit.go.jp/meikoku/"
-]
-
-]
-
-},
-
-
-// 三重
-"三重県":{
-
-"津市":[
-
-[
-"三重河川国道事務所",
-"https://www.cbr.mlit.go.jp/mie/"
-]
-
-]
-
-},
-
-
-// 滋賀
-"滋賀県":{
-
-"大津市":[
-
-[
-"滋賀国道事務所",
-"https://www.kkr.mlit.go.jp/shiga/"
-]
-
-]
-
-},
-
-
-// 京都
-"京都府":{
-
-"京都市":[
-
-[
-"京都国道事務所",
-"https://www.kkr.mlit.go.jp/kyoto/"
-]
-
-]
-
-},
-
-
-// 大阪
-"大阪府":{
-
-"大阪市":[
-
-[
-"大阪国道事務所",
-"https://www.kkr.mlit.go.jp/osaka/"
-]
-
-]
-
-},
-
-
-// 兵庫
-"兵庫県":{
-
-"神戸市":[
-
-[
-"兵庫国道事務所",
-"https://www.kkr.mlit.go.jp/hyogo/"
-]
-
-]
-
-},
-
-
-// 奈良
-"奈良県":{
-
-"奈良市":[
-
-[
-"奈良国道事務所",
-"https://www.kkr.mlit.go.jp/nara/"
-]
-
-]
-
-},
-
-
-// 和歌山
-"和歌山県":{
-
-"和歌山市":[
-
-[
-"和歌山河川国道事務所",
-"https://www.kkr.mlit.go.jp/wakayama/"
-]
-
-]
-
-},
-
-
-// 岡山
-"岡山県":{
-
-"岡山市":[
-
-[
-"岡山国道事務所",
-"https://www.cgr.mlit.go.jp/okakoku/"
-]
-
-]
-
-},
-
-
-// 広島
-"広島県":{
-
-"広島市":[
-
-[
-"広島国道事務所",
-"https://www.cgr.mlit.go.jp/hirokoku/"
-]
-
-]
-
-},
-
-
-// 山口
-"山口県":{
-
-"山口市":[
-
-[
-"山口河川国道事務所",
-"https://www.cgr.mlit.go.jp/yamaguchi/"
-]
-
-]
-
-},
-
-
-// 徳島
-"徳島県":{
-
-"徳島市":[
-
-[
-"徳島河川国道事務所",
-"https://www.skr.mlit.go.jp/tokushima/"
-]
-
-]
-
-},
-
-
-// 香川
-"香川県":{
-
-"高松市":[
-
-[
-"香川河川国道事務所",
-"https://www.skr.mlit.go.jp/kagawa/"
-]
-
-]
-
-},
-
-
-// 愛媛
-"愛媛県":{
-
-"松山市":[
-
-[
-"松山河川国道事務所",
-"https://www.skr.mlit.go.jp/matsuyam/"
-]
-
-]
-
-},
-
-
-// 高知
-"高知県":{
-
-"高知市":[
-
-[
-"高知河川国道事務所",
-"https://www.skr.mlit.go.jp/kochi/"
-]
-
-]
-
-},
-
-
-// 福岡
-"福岡県":{
-
-"北九州市":[
-
-[
-"北九州国道事務所",
-"https://www.qsr.mlit.go.jp/kitakyu/"
-]
-
-]
-
-},
-
-
-// 佐賀
-"佐賀県":{
-
-"佐賀市":[
-
-[
-"佐賀河川国道事務所",
-"https://www.qsr.mlit.go.jp/saga/"
-]
-
-]
-
-},
-
-
-// 熊本
-"熊本県":{
-
-"熊本市":[
-
-[
-"熊本河川国道事務所",
-"https://www.qsr.mlit.go.jp/kumamoto/"
-]
-
-]
-
-},
-
-
-// 大分
-"大分県":{
-
-"大分市":[
-
-[
-"大分河川国道事務所",
-"https://www.qsr.mlit.go.jp/oita/"
-]
-
-]
-
-},
-
-
-// 宮崎
-"宮崎県":{
-
-"宮崎市":[
-
-[
-"宮崎河川国道事務所",
-"https://www.qsr.mlit.go.jp/miyazaki/"
-]
-
-]
-
-},
-
-
-// 鹿児島
-"鹿児島県":{
-
-"鹿児島市":[
-
-[
-"鹿児島国道事務所",
-"https://www.qsr.mlit.go.jp/kagoshima/"
-]
-
-]
-
-},
-
-
-// 沖縄
-"沖縄県":{
-
-"那覇市":[
-
-[
-"沖縄総合事務局 道路情報",
-"https://www.dc.ogb.go.jp/road/"
-]
-
-]
-
-}
-
-};
-
-
-// ==========================================
-// 都道府県
-// ==========================================
-
-const prefectures=[
+/* =====================================================
+   都道府県
+===================================================== */
+
+const prefectures = [
 
 "北海道",
 "青森県",
@@ -1445,9 +264,9 @@ const prefectures=[
 "富山県",
 "石川県",
 "福井県",
-
 "山梨県",
 "長野県",
+
 "岐阜県",
 "静岡県",
 "愛知県",
@@ -1483,561 +302,775 @@ const prefectures=[
 ];
 
 
-// ==========================================
-// 都道府県表示
-// ==========================================
+/* =====================================================
+   カメラデータ
+===================================================== */
+
+const cameraData = {
+
+"新潟県":{
+
+  "佐渡市":[
+
+    {
+      name:"大野亀",
+      type:"地域カメラ",
+      update:"約1分間隔",
+      source:
+      "新潟県佐渡市公式"
+    },
+
+    {
+      name:"岩谷口",
+      type:"地域カメラ",
+      update:"約1分間隔",
+      source:
+      "新潟県佐渡市公式"
+    },
+
+    {
+      name:"入川",
+      type:"地域カメラ",
+      update:"約1分間隔",
+      source:
+      "新潟県佐渡市公式"
+    },
+
+    {
+      name:"姫津",
+      type:"地域カメラ",
+      update:"約1分間隔",
+      source:
+      "新潟県佐渡市公式"
+    },
+
+    {
+      name:"浦川",
+      type:"地域カメラ",
+      update:"約1分間隔",
+      source:
+      "新潟県佐渡市公式"
+    },
+
+    {
+      name:"吉住",
+      type:"地域カメラ",
+      update:"約1分間隔",
+      source:
+      "新潟県佐渡市公式"
+    },
+
+    {
+      name:"両津大川",
+      type:"地域カメラ",
+      update:"約1分間隔",
+      source:
+      "新潟県佐渡市公式"
+    },
+
+    {
+      name:"新穂ダム",
+      type:"地域カメラ",
+      update:"約1分間隔",
+      source:
+      "新潟県佐渡市公式"
+    },
+
+    {
+      name:"赤玉",
+      type:"地域カメラ",
+      update:"約1分間隔",
+      source:
+      "新潟県佐渡市公式"
+    },
+
+    {
+      name:"松ヶ崎",
+      type:"地域カメラ",
+      update:"約1分間隔",
+      source:
+      "新潟県佐渡市公式"
+    },
+
+    {
+      name:"赤泊港",
+      type:"地域カメラ",
+      update:"約1分間隔",
+      source:
+      "新潟県佐渡市公式"
+    },
+
+    {
+      name:"小木港",
+      type:"地域カメラ",
+      update:"約1分間隔",
+      source:
+      "新潟県佐渡市公式"
+    },
+
+    {
+      name:"沢崎",
+      type:"地域カメラ",
+      update:"約1分間隔",
+      source:
+      "新潟県佐渡市公式"
+    },
+
+    {
+      name:"木流",
+      type:"地域カメラ",
+      update:"約1分間隔",
+      source:
+      "新潟県佐渡市公式"
+    },
+
+    {
+      name:"二見港",
+      type:"地域カメラ",
+      update:"約1分間隔",
+      source:
+      "新潟県佐渡市公式"
+    },
+
+    {
+      name:"背合",
+      type:"地域カメラ",
+      update:"約1分間隔",
+      source:
+      "新潟県佐渡市公式"
+    },
+
+    {
+      name:"八幡",
+      type:"地域カメラ",
+      update:"約1分間隔",
+      source:
+      "新潟県佐渡市公式"
+    }
+
+  ],
+
+  "新潟市":[
+
+    {
+      name:"国道7号 東堀前通",
+      type:"一般道カメラ",
+      update:"公式サイト",
+      source:"にいがたLIVEカメラ"
+    },
+
+    {
+      name:"国道7号 競馬場IC",
+      type:"一般道カメラ",
+      update:"公式サイト",
+      source:"にいがたLIVEカメラ"
+    },
+
+    {
+      name:"国道7号 海老ヶ瀬IC",
+      type:"一般道カメラ",
+      update:"公式サイト",
+      source:"にいがたLIVEカメラ"
+    },
+
+    {
+      name:"国道8号 桜木IC",
+      type:"一般道カメラ",
+      update:"公式サイト",
+      source:"にいがたLIVEカメラ"
+    },
+
+    {
+      name:"国道49号 姥ヶ山IC",
+      type:"一般道カメラ",
+      update:"公式サイト",
+      source:"にいがたLIVEカメラ"
+    },
+
+    {
+      name:"国道116号 美咲町",
+      type:"一般道カメラ",
+      update:"公式サイト",
+      source:"にいがたLIVEカメラ"
+    }
+
+  ],
+
+  "村上市":[
+
+    {
+      name:"国道7号 潟端",
+      type:"一般道カメラ",
+      update:"公式サイト",
+      source:"にいがたLIVEカメラ"
+    },
+
+    {
+      name:"国道7号 猿沢",
+      type:"一般道カメラ",
+      update:"公式サイト",
+      source:"にいがたLIVEカメラ"
+    },
+
+    {
+      name:"国道7号 大須戸",
+      type:"一般道カメラ",
+      update:"公式サイト",
+      source:"にいがたLIVEカメラ"
+    },
+
+    {
+      name:"国道345号 寒川",
+      type:"一般道カメラ",
+      update:"公式サイト",
+      source:"にいがたLIVEカメラ"
+    }
+
+  ],
+
+  "燕市":[
+
+    {
+      name:"国道116号 新橋",
+      type:"一般道カメラ",
+      update:"公式サイト",
+      source:"にいがたLIVEカメラ"
+    },
+
+    {
+      name:"国道116号 見晴橋",
+      type:"一般道カメラ",
+      update:"公式サイト",
+      source:"にいがたLIVEカメラ"
+    }
+
+  ]
+
+}
+
+};
+
+
+/* =====================================================
+   都道府県
+===================================================== */
 
 function showPrefectures(){
 
-const menu=
-document.getElementById("cameraMenu");
+  const menu=
+    document.getElementById("cameraMenu");
 
-const view=
-document.getElementById("cameraView");
+  const path=
+    document.getElementById("cameraPath");
 
-menu.innerHTML="";
+  menu.innerHTML="";
 
-view.style.display="none";
+  path.textContent=
+    "JAPAN / ALL PREFECTURES";
 
-prefectures.forEach(pref=>{
 
-const button=
-document.createElement("button");
+  prefectures.forEach(pref=>{
 
-button.textContent=
-"📍 "+pref;
+    const button=
+      document.createElement("button");
 
-button.onclick=
-function(){
+    button.className="full";
 
-showCities(pref);
+    button.textContent=
+      "▸ "+pref;
 
-};
+    button.onclick=()=>{
+      showCities(pref);
+    };
 
-menu.appendChild(button);
+    menu.appendChild(button);
 
-});
+  });
 
 }
 
 
-// ==========================================
-// 市区町村表示
-// ==========================================
+/* =====================================================
+   市区町村
+===================================================== */
 
 function showCities(pref){
 
-const menu=
-document.getElementById("cameraMenu");
+  const menu=
+    document.getElementById("cameraMenu");
 
-const view=
-document.getElementById("cameraView");
+  const path=
+    document.getElementById("cameraPath");
 
-const title=
-document.getElementById("cameraTitle");
+  menu.innerHTML="";
 
-const links=
-document.getElementById("cameraLinks");
-
-menu.innerHTML="";
-
-view.style.display="block";
-
-title.textContent=
-"// "+pref+" LIVE CAMERA";
-
-links.innerHTML="";
+  path.textContent=
+    "JAPAN / "+pref;
 
 
-// 戻る
+  const back=
+    document.createElement("button");
 
-const back=
-document.createElement("button");
+  back.className="full";
 
-back.className="back";
+  back.textContent=
+    "← ALL PREFECTURES";
 
-back.textContent=
-"← 都道府県一覧";
+  back.onclick=
+    showPrefectures;
 
-back.onclick=
-showPrefectures;
-
-menu.appendChild(back);
+  menu.appendChild(back);
 
 
-const cities=
-cameraData[pref];
+  if(!cameraData[pref]){
+
+    const info=
+      document.createElement("div");
+
+    info.className="small";
+
+    info.innerHTML=
+      "<br>この都道府県のカメラデータは"+
+      "まだ登録されていません。";
+
+    menu.appendChild(info);
+
+    return;
+
+  }
 
 
-// データがない県
+  Object.keys(cameraData[pref])
+  .forEach(city=>{
 
-if(!cities){
+    const button=
+      document.createElement("button");
 
-const message=
-document.createElement("div");
+    button.className="full";
 
-message.className="small";
+    button.textContent=
+      "▸ "+city;
 
-message.style.marginTop="14px";
+    button.onclick=()=>{
+      showCameras(pref,city);
+    };
 
-message.textContent=
-"この地域のカメラ情報を準備中です。";
+    menu.appendChild(button);
 
-menu.appendChild(message);
-
-const official=
-document.createElement("a");
-
-official.className="link";
-
-official.href=
-"https://www6.kaiho.mlit.go.jp/livecamera.html";
-
-official.target="_blank";
-
-official.textContent=
-"📹 海上保安庁 全国ライブカメラ";
-
-links.appendChild(official);
-
-return;
+  });
 
 }
 
 
-// 市区町村
-
-Object.keys(cities).forEach(city=>{
-
-const button=
-document.createElement("button");
-
-button.textContent=
-"🏙️ "+city;
-
-button.onclick=
-function(){
-
-showCameras(pref,city);
-
-};
-
-menu.appendChild(button);
-
-});
-
-}
-
-
-// ==========================================
-// カメラ一覧
-// ==========================================
+/* =====================================================
+   カメラ一覧
+===================================================== */
 
 function showCameras(pref,city){
 
-const menu=
-document.getElementById("cameraMenu");
+  const menu=
+    document.getElementById("cameraMenu");
 
-const view=
-document.getElementById("cameraView");
+  const path=
+    document.getElementById("cameraPath");
 
-const title=
-document.getElementById("cameraTitle");
+  menu.innerHTML="";
 
-const links=
-document.getElementById("cameraLinks");
-
-menu.innerHTML="";
-
-view.style.display="block";
-
-title.textContent=
-"// "+pref+" / "+city;
-
-links.innerHTML="";
+  path.textContent=
+    "JAPAN / "+pref+" / "+city;
 
 
-// 市区町村へ戻る
+  const back=
+    document.createElement("button");
 
-const back=
-document.createElement("button");
+  back.className="full";
 
-back.textContent=
-"← "+pref+" 市区町村";
+  back.textContent=
+    "← "+pref;
 
-back.onclick=
-function(){
+  back.onclick=()=>{
+    showCities(pref);
+  };
 
-showCities(pref);
-
-};
-
-menu.appendChild(back);
+  menu.appendChild(back);
 
 
-// カメラ
+  cameraData[pref][city]
+  .forEach(camera=>{
 
-const cameras=
-cameraData[pref][city];
+    const button=
+      document.createElement("button");
 
-cameras.forEach(camera=>{
+    button.className="full";
 
-const link=
-document.createElement("a");
+    button.textContent=
+      "📹 "+camera.name;
 
-link.className="link";
+    button.onclick=()=>{
+      showCamera(camera,pref,city);
+    };
 
-link.href=camera[1];
+    menu.appendChild(button);
 
-link.target="_blank";
-
-link.textContent=
-"📹 "+camera[0];
-
-links.appendChild(link);
-
-});
+  });
 
 }
 
 
-// ==========================================
-// 初期化
-// ==========================================
+/* =====================================================
+   カメラ詳細
+===================================================== */
+
+function showCamera(camera,pref,city){
+
+  const view=
+    document.getElementById("cameraView");
+
+  const info=
+    document.getElementById("cameraInfo");
+
+
+  view.style.display="block";
+
+
+  info.innerHTML=`
+
+    <div class="cameraBox">
+
+      <div class="live">
+        ● CAMERA REGISTERED
+      </div>
+
+      <br>
+
+      <b>${camera.name}</b>
+
+      <br><br>
+
+      LOCATION :
+      ${pref} / ${city}
+
+      <br>
+
+      TYPE :
+      ${camera.type}
+
+      <br>
+
+      UPDATE :
+      ${camera.update}
+
+      <br>
+
+      SOURCE :
+      ${camera.source}
+
+    </div>
+
+    <br>
+
+    <div class="cameraStatus">
+
+      ⚠ LIVE IMAGE DISPLAY
+
+      <br><br>
+
+      このカメラは公式サイトで公開されている
+      ライブカメラです。
+
+      <br><br>
+
+      ただし、提供元が画像の直接埋め込みを
+      許可しているか確認できないため、
+      TACTICAL AIから画像URLを勝手に
+      抜き出して表示する処理は行っていません。
+
+      <br><br>
+
+      CAMERA STATUS :
+      <span class="live">
+      OFFICIAL SOURCE VERIFIED
+      </span>
+
+    </div>
+
+  `;
+
+
+  view.scrollIntoView({
+    behavior:"smooth"
+  });
+
+}
+
+
+/* =====================================================
+   VOICE
+===================================================== */
+
+function startVoice(){
+
+  const SpeechRecognition=
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+  if(!SpeechRecognition){
+
+    alert(
+      "このブラウザでは音声入力に対応していません。"
+    );
+
+    return;
+
+  }
+
+
+  const recognition=
+    new SpeechRecognition();
+
+  recognition.lang="ja-JP";
+
+  recognition.interimResults=false;
+
+  recognition.continuous=false;
+
+
+  recognition.onstart=()=>{
+
+    document.getElementById(
+      "result"
+    ).textContent=
+      "🎙 LISTENING...";
+
+  };
+
+
+  recognition.onresult=(event)=>{
+
+    const text=
+      event.results[0][0].transcript;
+
+    document.getElementById(
+      "query"
+    ).value=text;
+
+    analyze();
+
+  };
+
+
+  recognition.onerror=()=>{
+
+    document.getElementById(
+      "result"
+    ).textContent=
+      "VOICE ERROR";
+
+  };
+
+
+  recognition.start();
+
+}
+
+
+/* =====================================================
+   AI
+===================================================== */
+
+function analyze(){
+
+  const input=
+    document.getElementById(
+      "query"
+    ).value.trim();
+
+  const result=
+    document.getElementById(
+      "result"
+    );
+
+
+  if(!input){
+
+    result.textContent=
+      "QUERY EMPTY";
+
+    return;
+
+  }
+
+
+  result.textContent=
+    "ANALYZING...\n"+
+    "SCANNING INFORMATION NETWORK...";
+
+
+  setTimeout(()=>{
+
+    let answer=
+      "QUERY RECEIVED\n\n"+
+      "「"+input+"」\n\n"+
+      "TACTICAL AI:\n"+
+      "現在は公開情報検索モジュールを使用できます。";
+
+
+    if(
+      input.includes("カメラ")||
+      input.includes("ライブ")
+    ){
+
+      answer=
+        "LIVE CAMERA NETWORK\n\n"+
+        "全国 → 都道府県 → 市区町村 → カメラ\n"+
+        "の順番で選択してください。";
+
+    }
+
+
+    if(
+      input.includes("天気")||
+      input.includes("気温")
+    ){
+
+      answer=
+        "WEATHER REQUEST\n\n"+
+        "WEATHER SCANを実行してください。";
+
+    }
+
+
+    result.textContent=answer;
+
+  },700);
+
+}
+
+
+/* =====================================================
+   SPEAK
+===================================================== */
+
+function speakResult(){
+
+  const text=
+    document.getElementById(
+      "result"
+    ).textContent;
+
+  if(!("speechSynthesis" in window)){
+
+    alert(
+      "音声読み上げに対応していません。"
+    );
+
+    return;
+
+  }
+
+
+  speechSynthesis.cancel();
+
+
+  const speech=
+    new SpeechSynthesisUtterance(text);
+
+  speech.lang="ja-JP";
+  speech.rate=1;
+  speech.pitch=.9;
+
+  speechSynthesis.speak(speech);
+
+}
+
+
+/* =====================================================
+   WEATHER
+===================================================== */
+
+async function getWeather(){
+
+  const weather=
+    document.getElementById(
+      "weather"
+    );
+
+
+  weather.textContent=
+    "SCANNING WEATHER...";
+
+
+  try{
+
+    const url=
+      "https://api.open-meteo.com/v1/forecast"+
+      "?latitude=35.6762"+
+      "&longitude=139.6503"+
+      "&current=temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m,weather_code"+
+      "&timezone=Asia%2FTokyo";
+
+
+    const response=
+      await fetch(url);
+
+    const data=
+      await response.json();
+
+    const c=
+      data.current;
+
+
+    weather.textContent=
+      "LOCATION : TOKYO\n\n"+
+      "TEMP     : "+
+      c.temperature_2m+
+      " °C\n"+
+      "FEELS    : "+
+      c.apparent_temperature+
+      " °C\n"+
+      "HUMIDITY : "+
+      c.relative_humidity_2m+
+      " %\n"+
+      "WIND     : "+
+      c.wind_speed_10m+
+      " km/h\n\n"+
+      "● WEATHER DATA RECEIVED";
+
+  }
+
+  catch(error){
+
+    weather.textContent=
+      "WEATHER CONNECTION ERROR";
+
+  }
+
+}
+
+
+/* =====================================================
+   ENTER
+===================================================== */
+
+document
+.getElementById("query")
+.addEventListener(
+  "keydown",
+  event=>{
+
+    if(event.key==="Enter"){
+      analyze();
+    }
+
+  }
+);
+
+
+/* =====================================================
+   START
+===================================================== */
 
 showPrefectures();
-
-
-// ==========================================
-// AI ANALYZE
-// ==========================================
-
-async function analyze(){
-
-const text=
-q.value.trim();
-
-if(!text){
-
-output.textContent=
-"ERROR\n\nQUERY NOT FOUND.";
-
-return;
-
-}
-
-
-output.textContent=
-">> QUERY RECEIVED\n\n"+
-text+
-"\n\n>> JAPAN DATA LINK INITIALIZING...";
-
-bar.style.width="20%";
-
-await wait(350);
-
-
-const city=
-getCity(text);
-
-locationBox.textContent=
-city.name;
-
-bar.style.width="40%";
-
-
-// ==========================================
-// 天気
-// ==========================================
-
-if(
-
-text.includes("天気")||
-text.includes("気温")||
-text.includes("雨")||
-text.includes("暑い")||
-text.includes("寒い")
-
-){
-
-try{
-
-network.textContent=
-"CONNECTED";
-
-data.textContent=
-"RECEIVING";
-
-
-const weather=
-await getWeather(city);
-
-const current=
-weather.current;
-
-const temp=
-current.temperature_2m;
-
-const feels=
-current.apparent_temperature;
-
-const humidity=
-current.relative_humidity_2m;
-
-const wind=
-current.wind_speed_10m;
-
-const condition=
-weatherText(current.weather_code);
-
-
-bar.style.width="80%";
-
-await wait(500);
-
-
-output.textContent=
-
-">> ANALYSIS COMPLETE\n\n"+
-"━━━━━━━━━━━━━━━━━━\n"+
-"LOCATION : "+city.name+
-"\nCONDITION : "+condition+
-"\nTEMPERATURE : "+temp+" °C"+
-"\nFEELS LIKE : "+feels+" °C"+
-"\nHUMIDITY : "+humidity+" %"+
-"\nWIND : "+wind+" km/h"+
-"\n━━━━━━━━━━━━━━━━━━\n\n"+
-"DATA SOURCE : OPEN-METEO"+
-"\nSTATUS : LIVE DATA RECEIVED";
-
-
-info.innerHTML=
-
-"🇯🇵 "+city.name+
-"<br><br>"+
-"🌤️ "+condition+
-"<br>"+
-"🌡️ "+temp+" °C"+
-"<br>"+
-"💧 湿度 "+humidity+" %"+
-"<br>"+
-"💨 風速 "+wind+" km/h";
-
-
-data.textContent=
-"LIVE";
-
-bar.style.width=
-"100%";
-
-
-speak(
-
-city.name+
-"の現在の天気は"+
-condition+
-"です。"+
-"気温は"+
-temp+
-"度です。"
-
-);
-
-
-}catch(error){
-
-network.textContent=
-"ERROR";
-
-data.textContent=
-"OFFLINE";
-
-output.textContent=
-"DATA LINK ERROR\n\n"+
-"天気データを取得できませんでした。";
-
-}
-
-}
-
-
-// ==========================================
-// カメラ
-// ==========================================
-
-else if(
-
-text.includes("カメラ")||
-text.includes("ライブ")||
-text.includes("映像")
-
-){
-
-bar.style.width=
-"100%";
-
-
-output.textContent=
-
-">> LIVE CAMERA MODULE\n\n"+
-"全国ライブカメラネットワークを起動しました。\n\n"+
-"下のJAPAN LIVE CAMERA NETWORKから\n"+
-"都道府県 → 市区町村 → カメラ\n"+
-"の順番で選択してください。";
-
-
-speak(
-
-"全国ライブカメラネットワークを起動しました。"
-
-);
-
-}
-
-
-// ==========================================
-// ニュース
-// ==========================================
-
-else if(
-
-text.includes("ニュース")||
-text.includes("最新情報")||
-text.includes("日本の情報")
-
-){
-
-bar.style.width=
-"100%";
-
-
-output.textContent=
-
-">> NEWS MODULE\n\n"+
-"日本の公式情報源を表示しています。\n\n"+
-"下のNEWS INFORMATIONから\n"+
-"確認したい情報を選択してください。";
-
-
-speak(
-
-"日本の最新情報を確認できます。"
-
-);
-
-}
-
-
-// ==========================================
-// その他
-// ==========================================
-
-else{
-
-bar.style.width=
-"100%";
-
-
-output.textContent=
-
-">> QUERY RECEIVED\n\n"+
-text+
-"\n\n"+
-"TACTICAL AIは入力を認識しました。\n\n"+
-"利用可能なモジュール：\n"+
-"・全国天気情報\n"+
-"・全国公開ライブカメラ\n"+
-"・ニュース情報\n"+
-"・防災情報\n"+
-"・交通情報";
-
-}
-
-
-setTimeout(
-
-()=>{
-
-bar.style.width=
-"0%";
-
-},
-
-1000
-
-);
-
-}
-
-
-// ==========================================
-// 音声
-// ==========================================
-
-function speak(text){
-
-if(
-!("speechSynthesis" in window)
-)
-return;
-
-
-speechSynthesis.cancel();
-
-
-const utterance=
-new SpeechSynthesisUtterance(text);
-
-
-utterance.lang=
-"ja-JP";
-
-utterance.rate=
-1;
-
-utterance.pitch=
-1;
-
-
-speechSynthesis.speak(
-utterance
-);
-
-}
-
-
-// ==========================================
-// WAIT
-// ==========================================
-
-function wait(ms){
-
-return new Promise(
-
-resolve=>
-setTimeout(resolve,ms)
-
-);
-
-}
-
-
-// ==========================================
-// ENTER
-// ==========================================
-
-q.addEventListener(
-
-"keydown",
-
-function(e){
-
-if(e.key==="Enter")
-analyze();
-
-}
-
-);
 
 </script>
 
