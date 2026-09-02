@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TACTICAL AI // JAPAN</title>
+<style>
+body{
+  margin:0;
+  background:#020604;
+  color:#72ff9b;
+  font-family:monospace;
+  min-height:100vh;
+}
+.app{
+  max-width:700px;
+  margin:auto;
+  padding:20px;
+}
+h1{
+  letter-spacing:3px;
+  border-bottom:1px solid #245e38;
+  padding-bottom:15px;
+}
+.panel{
+  border:1px solid #205f38;
+  padding:15px;
+  margin-top:15px;
+  background:#001408;
+}
+button{
+  width:100%;
+  padding:15px;
+  margin-top:10px;
+  background:#092a15;
+  color:#72ff9b;
+  border:1px solid #39c96b;
+  font:bold 14px monospace;
+}
+#output{
+  white-space:pre-wrap;
+  line-height:1.7;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<h1>TACTICAL AI // JAPAN</h1>
+
+<div class="panel">
+STATUS : <b>ONLINE</b><br>
+NETWORK : <b>READY</b><br>
+JAPAN DATA : <b>STANDBY</b>
+</div>
+
+<div class="panel">
+<button onclick="speak()">🎤 SPEAK</button>
+</div>
+
+<div class="panel">
+<div id="output">
+TACTICAL AI SYSTEM READY.
+Waiting for voice input...
+</div>
+</div>
+
+</div>
+
+<script>
+function speak(){
+
+  if(!("webkitSpeechRecognition" in window)){
+    document.getElementById("output").textContent=
+      "ERROR\n\nこのブラウザでは音声認識を利用できません。";
+    return;
+  }
+
+  const recognition=new webkitSpeechRecognition();
+
+  recognition.lang="ja-JP";
+  recognition.start();
+
+  document.getElementById("output").textContent=
+    ">> LISTENING...\n\n話しかけてください。";
+
+  recognition.onresult=function(event){
+
+    const text=event.results[0][0].transcript;
+
+    document.getElementById("output").textContent=
+      ">> VOICE RECEIVED\n\n"+
+      "QUERY : "+text+
+      "\n\n>> ANALYZING...";
+
+  };
+
+}
+</script>
+
+</body>
+</html>
