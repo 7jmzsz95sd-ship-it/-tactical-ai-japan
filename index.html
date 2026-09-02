@@ -99,6 +99,7 @@ button{
 
 button:active{
   transform:scale(.98);
+  background:#124b25;
 }
 
 #output{
@@ -140,18 +141,23 @@ button:active{
   transition:width .4s;
 }
 
-.camera{
+.link{
   display:block;
+  text-decoration:none;
+  color:#72ff9b;
+  border:1px solid #194a2b;
   padding:12px;
   margin-top:8px;
-  border:1px solid #194a2b;
-  color:#72ff9b;
-  text-decoration:none;
+  background:#031008;
+}
+
+.link:active{
+  background:#0b2b17;
 }
 
 .small{
-  font-size:10px;
   color:#42b866;
+  font-size:10px;
 }
 </style>
 </head>
@@ -161,74 +167,106 @@ button:active{
 <div class="app">
 
 <header>
-  <h1>TACTICAL AI // JAPAN</h1>
-  <div class="status">
-    <span class="dot"></span>
-    SYSTEM ONLINE
-  </div>
+<h1>TACTICAL AI // JAPAN</h1>
+
+<div class="status">
+<span class="dot"></span>
+SYSTEM ONLINE
+</div>
 </header>
+
+
+<!-- QUERY -->
 
 <div class="panel">
 
-<div class="label">VOICE / QUERY TERMINAL</div>
+<div class="label">
+VOICE / QUERY TERMINAL
+</div>
 
 <input
- id="q"
- placeholder="例：東京の天気は？"
- autocomplete="off"
+id="q"
+placeholder="例：東京の天気は？"
+autocomplete="off"
 >
 
-<button onclick="listen()">🎤 SPEAK</button>
+<button onclick="listen()">
+🎤 SPEAK
+</button>
 
-<button onclick="analyze()">▶ ANALYZE</button>
+<button onclick="analyze()">
+▶ ANALYZE
+</button>
 
 </div>
 
+
+<!-- OUTPUT -->
+
 <div class="panel">
 
-<div class="label">ANALYSIS OUTPUT</div>
+<div class="label">
+ANALYSIS OUTPUT
+</div>
 
 <div id="output">
 TACTICAL AI SYSTEM READY.
 
-日本のリアルタイム情報モジュール待機中...
+日本情報モジュール待機中...
 </div>
 
 </div>
+
+
+<!-- STATUS -->
 
 <div class="panel">
 
-<div class="label">LIVE DATA</div>
+<div class="label">
+SYSTEM STATUS
+</div>
 
 <div class="grid">
 
 <div class="box">
 NETWORK
-<div class="value" id="network">READY</div>
+<div class="value" id="network">
+READY
+</div>
 </div>
 
 <div class="box">
 DATA
-<div class="value" id="data">STANDBY</div>
+<div class="value" id="data">
+STANDBY
+</div>
 </div>
 
 <div class="box">
 LOCATION
-<div class="value" id="location">JAPAN</div>
+<div class="value" id="location">
+JAPAN
+</div>
 </div>
 
 <div class="box">
 VOICE
-<div class="value">ACTIVE</div>
+<div class="value">
+ACTIVE
+</div>
 </div>
 
 </div>
-
 </div>
+
+
+<!-- PROCESSING -->
 
 <div class="panel">
 
-<div class="label">PROCESSING</div>
+<div class="label">
+PROCESSING
+</div>
 
 <div class="bar">
 <span id="bar"></span>
@@ -236,9 +274,107 @@ VOICE
 
 </div>
 
+
+<!-- JAPAN SOURCES -->
+
 <div class="panel">
 
-<div class="label">JAPAN INFORMATION</div>
+<div class="label">
+JAPAN LIVE INFORMATION
+</div>
+
+<div class="small">
+公式公開情報へのアクセス
+</div>
+
+
+<a
+class="link"
+href="https://www6.kaiho.mlit.go.jp/livecamera.html"
+target="_blank"
+>
+📹 海上保安庁 全国ライブカメラ
+</a>
+
+
+<a
+class="link"
+href="https://www.hrr.mlit.go.jp/road/cctvclip/"
+target="_blank"
+>
+🚗 国土交通省 道路CCTV
+</a>
+
+
+<a
+class="link"
+href="https://www.hrr.mlit.go.jp/niikoku/"
+target="_blank"
+>
+🛣️ 国土交通省 新潟道路ライブカメラ
+</a>
+
+
+<a
+class="link"
+href="https://www.qsr.mlit.go.jp/kitakyu/"
+target="_blank"
+>
+🚗 九州・北九州 道路ライブカメラ
+</a>
+
+</div>
+
+
+<!-- NEWS -->
+
+<div class="panel">
+
+<div class="label">
+NEWS / INFORMATION
+</div>
+
+<div class="small">
+最新ニュースを公式サイトで確認
+</div>
+
+
+<a
+class="link"
+href="https://www3.nhk.or.jp/news/"
+target="_blank"
+>
+📰 NHK NEWS
+</a>
+
+
+<a
+class="link"
+href="https://www.jma.go.jp/bosai/"
+target="_blank"
+>
+🌦️ 気象庁 防災情報
+</a>
+
+
+<a
+class="link"
+href="https://www.jartic.or.jp/"
+target="_blank"
+>
+🚦 日本道路交通情報センター
+</a>
+
+</div>
+
+
+<!-- RESULT -->
+
+<div class="panel">
+
+<div class="label">
+JAPAN DATA
+</div>
 
 <div id="info">
 情報取得待機中...
@@ -248,399 +384,422 @@ VOICE
 
 </div>
 
+
 <script>
 
 const q=document.getElementById("q");
 const output=document.getElementById("output");
 const bar=document.getElementById("bar");
-const network=document.getElementById("network");
-const data=document.getElementById("data");
-const info=document.getElementById("info");
+
+const network=
+document.getElementById("network");
+
+const data=
+document.getElementById("data");
+
+const info=
+document.getElementById("info");
+
+const locationBox=
+document.getElementById("location");
 
 
 // ======================
-// 音声入力
+// 音声認識
 // ======================
 
 function listen(){
 
-  const SpeechRecognition =
-    window.SpeechRecognition ||
-    window.webkitSpeechRecognition;
+const SpeechRecognition=
+window.SpeechRecognition ||
+window.webkitSpeechRecognition;
 
-  if(!SpeechRecognition){
+if(!SpeechRecognition){
 
-    output.textContent=
-      "ERROR\n\n"+
-      "このブラウザでは音声認識が利用できません。";
+output.textContent=
+"VOICE ERROR\n\n"+
+"このブラウザでは音声認識が利用できません。";
 
-    return;
-  }
+return;
 
-  const recognition=new SpeechRecognition();
+}
 
-  recognition.lang="ja-JP";
-  recognition.interimResults=false;
-  recognition.continuous=false;
+const recognition=
+new SpeechRecognition();
 
-  output.textContent=
-    ">> VOICE SYSTEM\n\n"+
-    "LISTENING...\n\n"+
-    "話しかけてください。";
+recognition.lang="ja-JP";
+recognition.interimResults=false;
+recognition.continuous=false;
 
-  recognition.start();
+output.textContent=
+">> VOICE SYSTEM\n\n"+
+"LISTENING...\n\n"+
+"話しかけてください。";
 
-  recognition.onresult=function(event){
+recognition.start();
 
-    const text=
-      event.results[0][0].transcript;
 
-    q.value=text;
+recognition.onresult=function(event){
 
-    output.textContent=
-      ">> VOICE RECEIVED\n\n"+
-      "QUERY : "+text+
-      "\n\n"+
-      "音声入力を受信しました。";
+const text=
+event.results[0][0].transcript;
 
-    analyze();
+q.value=text;
 
-  };
+output.textContent=
+">> VOICE RECEIVED\n\n"+
+"QUERY : "+text+
+"\n\n>> ANALYZING...";
 
-  recognition.onerror=function(){
+analyze();
 
-    output.textContent=
-      "VOICE ERROR\n\n"+
-      "音声を認識できませんでした。";
+};
 
-  };
+
+recognition.onerror=function(){
+
+output.textContent=
+"VOICE ERROR\n\n"+
+"音声を認識できませんでした。";
+
+};
 
 }
 
 
 // ======================
-// 都市判定
+// 都市
 // ======================
 
 function getCity(text){
 
-  const cities={
+const cities={
 
-    "東京":{
-      lat:35.6762,
-      lon:139.6503
-    },
+東京:[35.6762,139.6503],
+大阪:[34.6937,135.5023],
+京都:[35.0116,135.7681],
+名古屋:[35.1815,136.9066],
+札幌:[43.0618,141.3545],
+福岡:[33.5904,130.4017],
+仙台:[38.2682,140.8694],
+広島:[34.3853,132.4553],
+横浜:[35.4437,139.6380],
+那覇:[26.2124,127.6809]
 
-    "大阪":{
-      lat:34.6937,
-      lon:135.5023
-    },
+};
 
-    "京都":{
-      lat:35.0116,
-      lon:135.7681
-    },
+for(const city in cities){
 
-    "名古屋":{
-      lat:35.1815,
-      lon:136.9066
-    },
+if(text.includes(city)){
 
-    "札幌":{
-      lat:43.0618,
-      lon:141.3545
-    },
+return{
+name:city,
+lat:cities[city][0],
+lon:cities[city][1]
+};
 
-    "福岡":{
-      lat:33.5904,
-      lon:130.4017
-    },
+}
 
-    "仙台":{
-      lat:38.2682,
-      lon:140.8694
-    },
+}
 
-    "広島":{
-      lat:34.3853,
-      lon:132.4553
-    },
-
-    "横浜":{
-      lat:35.4437,
-      lon:139.6380
-    }
-
-  };
-
-  for(const city in cities){
-
-    if(text.includes(city)){
-
-      return {
-        name:city,
-        ...cities[city]
-      };
-
-    }
-
-  }
-
-  return {
-    name:"東京",
-    lat:35.6762,
-    lon:139.6503
-  };
+return{
+name:"東京",
+lat:35.6762,
+lon:139.6503
+};
 
 }
 
 
 // ======================
-// 天気コード
+// 天気
 // ======================
 
 function weatherText(code){
 
-  const list={
+const list={
 
-    0:"快晴",
+0:"快晴",
+1:"晴れ",
+2:"一部曇り",
+3:"曇り",
+45:"霧",
+48:"霧",
+51:"弱い霧雨",
+53:"霧雨",
+55:"強い霧雨",
+61:"弱い雨",
+63:"雨",
+65:"強い雨",
+71:"弱い雪",
+73:"雪",
+75:"強い雪",
+80:"にわか雨",
+81:"雨",
+82:"強いにわか雨",
+95:"雷雨",
+96:"雷雨",
+99:"強い雷雨"
 
-    1:"晴れ",
-    2:"一部曇り",
-    3:"曇り",
+};
 
-    45:"霧",
-    48:"霧",
-
-    51:"弱い霧雨",
-    53:"霧雨",
-    55:"強い霧雨",
-
-    61:"弱い雨",
-    63:"雨",
-    65:"強い雨",
-
-    71:"弱い雪",
-    73:"雪",
-    75:"強い雪",
-
-    80:"にわか雨",
-    81:"雨",
-    82:"強いにわか雨",
-
-    95:"雷雨",
-    96:"雷雨",
-    99:"強い雷雨"
-
-  };
-
-  return list[code] || "不明";
+return list[code]||"不明";
 
 }
 
 
 // ======================
-// 天気取得
+// 天気API
 // ======================
 
 async function getWeather(city){
 
-  const url=
-    "https://api.open-meteo.com/v1/forecast"+
-    "?latitude="+city.lat+
-    "&longitude="+city.lon+
-    "&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m"+
-    "&timezone=Asia%2FTokyo";
+const url=
+"https://api.open-meteo.com/v1/forecast"+
+"?latitude="+city.lat+
+"&longitude="+city.lon+
+"&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m"+
+"&timezone=Asia%2FTokyo";
 
-  const response=await fetch(url);
+const response=
+await fetch(url);
 
-  if(!response.ok){
+if(!response.ok){
 
-    throw new Error("Weather API ERROR");
+throw new Error("API ERROR");
 
-  }
+}
 
-  return await response.json();
+return await response.json();
 
 }
 
 
 // ======================
-// AI解析
+// AI
 // ======================
 
 async function analyze(){
 
-  const text=q.value.trim();
+const text=q.value.trim();
 
-  if(!text){
+if(!text){
 
-    output.textContent=
-      "ERROR\n\nQUERY NOT FOUND.";
+output.textContent=
+"ERROR\n\nQUERY NOT FOUND.";
 
-    return;
+return;
 
-  }
+}
 
-  output.textContent=
-    ">> QUERY RECEIVED\n\n"+
-    text+
-    "\n\n"+
-    ">> INITIALIZING JAPAN DATA LINK...";
+output.textContent=
+">> QUERY RECEIVED\n\n"+
+text+
+"\n\n>> JAPAN DATA LINK INITIALIZING...";
 
-  bar.style.width="20%";
+bar.style.width="20%";
 
-  await wait(400);
+await wait(350);
 
-  const city=getCity(text);
+const city=
+getCity(text);
 
-  output.textContent+=
-    "\n>> LOCATION : "+city.name;
+locationBox.textContent=
+city.name;
 
-  document.getElementById("location").textContent=
-    city.name;
+bar.style.width="40%";
 
-  bar.style.width="45%";
 
-  await wait(400);
+// 天気
 
-  // 天気について質問された場合
+if(
+text.includes("天気")||
+text.includes("気温")||
+text.includes("雨")||
+text.includes("暑い")||
+text.includes("寒い")
+){
 
-  if(
-    text.includes("天気") ||
-    text.includes("気温") ||
-    text.includes("雨") ||
-    text.includes("暑い") ||
-    text.includes("寒い")
-  ){
+try{
 
-    try{
+network.textContent=
+"CONNECTED";
 
-      network.textContent="CONNECTED";
-      data.textContent="RECEIVING";
+data.textContent=
+"RECEIVING";
 
-      const weather=
-        await getWeather(city);
+const weather=
+await getWeather(city);
 
-      bar.style.width="80%";
+const current=
+weather.current;
 
-      const current=
-        weather.current;
+const temp=
+current.temperature_2m;
 
-      const temp=
-        current.temperature_2m;
+const feels=
+current.apparent_temperature;
 
-      const feels=
-        current.apparent_temperature;
+const humidity=
+current.relative_humidity_2m;
 
-      const humidity=
-        current.relative_humidity_2m;
+const wind=
+current.wind_speed_10m;
 
-      const wind=
-        current.wind_speed_10m;
+const condition=
+weatherText(current.weather_code);
 
-      const condition=
-        weatherText(current.weather_code);
+bar.style.width="80%";
 
-      const answer=
-        ">> REALTIME WEATHER DATA\n\n"+
-        "LOCATION : "+city.name+"\n"+
-        "CONDITION : "+condition+"\n"+
-        "TEMPERATURE : "+temp+" °C\n"+
-        "FEELS LIKE : "+feels+" °C\n"+
-        "HUMIDITY : "+humidity+" %\n"+
-        "WIND : "+wind+" km/h\n\n"+
-        "DATA SOURCE : OPEN-METEO\n"+
-        "STATUS : LIVE DATA RECEIVED";
+await wait(500);
 
-      await wait(500);
+output.textContent=
+">> ANALYSIS COMPLETE\n\n"+
+"━━━━━━━━━━━━━━━━━━\n"+
+"LOCATION : "+city.name+
+"\nCONDITION : "+condition+
+"\nTEMPERATURE : "+temp+" °C"+
+"\nFEELS LIKE : "+feels+" °C"+
+"\nHUMIDITY : "+humidity+" %"+
+"\nWIND : "+wind+" km/h"+
+"\n━━━━━━━━━━━━━━━━━━\n\n"+
+"DATA SOURCE : OPEN-METEO"+
+"\nSTATUS : LIVE DATA RECEIVED";
 
-      bar.style.width="100%";
+info.innerHTML=
+"🇯🇵 "+city.name+
+"<br><br>"+
+"🌤️ "+condition+
+"<br>"+
+"🌡️ "+temp+" °C"+
+"<br>"+
+"💧 湿度 "+humidity+" %"+
+"<br>"+
+"💨 風速 "+wind+" km/h";
 
-      output.textContent=
-        answer+
-        "\n\n━━━━━━━━━━━━━━━━━━\n"+
-        "TACTICAL AI RESPONSE\n"+
-        "「"+city.name+"の現在の天気情報を取得しました。」";
+data.textContent="LIVE";
 
-      info.innerHTML=
-        "🇯🇵 "+city.name+
-        "<br><br>"+
-        "🌤 "+condition+
-        "<br>"+
-        "🌡 "+temp+" °C"+
-        "<br>"+
-        "💧 湿度 "+humidity+" %"+
-        "<br>"+
-        "💨 風速 "+wind+" km/h";
+bar.style.width="100%";
 
-      data.textContent="LIVE";
+speak(
+city.name+
+"の現在の天気は"+
+condition+
+"です。"+
+"気温は"+
+temp+
+"度です。"
+);
 
-      speak(
-        city.name+
-        "の現在の天気は"+
-        condition+
-        "です。"+
-        "気温は"+temp+
-        "度です。"
-      );
+}catch(error){
 
-    }catch(error){
+network.textContent="ERROR";
+data.textContent="OFFLINE";
 
-      network.textContent="ERROR";
-      data.textContent="OFFLINE";
+output.textContent=
+"DATA LINK ERROR\n\n"+
+"天気データを取得できませんでした。";
 
-      output.textContent=
-        "DATA LINK ERROR\n\n"+
-        "日本の天気データを取得できませんでした。\n\n"+
-        error;
+}
 
-    }
+}
 
-  }else{
 
-    bar.style.width="100%";
+// ライブカメラ
 
-    output.textContent=
-      ">> QUERY RECEIVED\n\n"+
-      text+
-      "\n\n"+
-      "現在このバージョンで取得できる"+
-      "リアルタイム情報は天気です。\n\n"+
-      "例：\n"+
-      "「東京の天気は？」\n"+
-      "「大阪の気温は？」\n"+
-      "「札幌は雨？」";
+else if(
+text.includes("カメラ")||
+text.includes("ライブ")||
+text.includes("映像")
+){
 
-  }
+bar.style.width="100%";
 
-  setTimeout(function(){
+output.textContent=
+">> LIVE CAMERA MODULE\n\n"+
+"日本の公式公開ライブカメラを確認できます。\n\n"+
+"下のJAPAN LIVE INFORMATIONから\n"+
+"カメラを選択してください。";
 
-    bar.style.width="0%";
+speak(
+"日本の公式公開ライブカメラを表示できます。"
+);
 
-  },1000);
+}
+
+
+// ニュース
+
+else if(
+text.includes("ニュース")||
+text.includes("最新情報")||
+text.includes("日本の情報")
+){
+
+bar.style.width="100%";
+
+output.textContent=
+">> NEWS MODULE\n\n"+
+"最新の日本情報を確認できます。\n\n"+
+"下のNEWS INFORMATIONから\n"+
+"公式情報源を選択してください。";
+
+speak(
+"日本の最新情報を確認できます。"
+);
+
+}
+
+
+// その他
+
+else{
+
+bar.style.width="100%";
+
+output.textContent=
+">> QUERY RECEIVED\n\n"+
+text+
+"\n\n"+
+"TACTICAL AIは入力を認識しました。\n\n"+
+"現在利用可能なモジュール：\n"+
+"・天気情報\n"+
+"・公開ライブカメラ\n"+
+"・ニュース情報\n"+
+"・防災情報\n"+
+"・交通情報";
+
+}
+
+setTimeout(
+()=>{
+bar.style.width="0%";
+},
+1000
+);
 
 }
 
 
 // ======================
-// 音声読み上げ
+// 音声
 // ======================
 
 function speak(text){
 
-  if(!("speechSynthesis" in window)) return;
+if(!("speechSynthesis" in window))
+return;
 
-  speechSynthesis.cancel();
+speechSynthesis.cancel();
 
-  const utterance=
-    new SpeechSynthesisUtterance(text);
+const utterance=
+new SpeechSynthesisUtterance(text);
 
-  utterance.lang="ja-JP";
-  utterance.rate=1.0;
-  utterance.pitch=1.0;
+utterance.lang="ja-JP";
+utterance.rate=1;
+utterance.pitch=1;
 
-  speechSynthesis.speak(utterance);
+speechSynthesis.speak(utterance);
 
 }
 
@@ -649,21 +808,21 @@ function speak(text){
 
 function wait(ms){
 
-  return new Promise(
-    resolve=>setTimeout(resolve,ms)
-  );
+return new Promise(
+resolve=>setTimeout(resolve,ms)
+);
 
 }
 
+
 q.addEventListener(
-  "keydown",
-  function(e){
+"keydown",
+function(e){
 
-    if(e.key==="Enter"){
-      analyze();
-    }
+if(e.key==="Enter")
+analyze();
 
-  }
+}
 );
 
 </script>
