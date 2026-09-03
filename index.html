@@ -6,9 +6,7 @@
 <title>TACTICAL AI // JAPAN</title>
 
 <style>
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
   margin:0;
@@ -131,17 +129,6 @@ button:active{
   margin-top:10px;
 }
 
-.cameraStatus{
-  border:1px solid #806f1d;
-  color:#ffe66d;
-  padding:12px;
-  line-height:1.6;
-}
-
-.live{
-  color:#43ff88;
-}
-
 .cameraImageBox{
   border:1px solid #1d7f43;
   padding:5px;
@@ -172,6 +159,34 @@ button:active{
   line-height:1.6;
 }
 
+.live{
+  color:#43ff88;
+}
+
+.autoStatus{
+  margin-top:8px;
+  padding:8px;
+  border-left:2px solid #43ff88;
+  font-size:11px;
+  letter-spacing:1px;
+}
+
+.liveDot{
+  animation:blink 1s infinite;
+}
+
+.cameraCountdown{
+  margin-top:5px;
+  font-size:12px;
+  color:#7affb5;
+  letter-spacing:1px;
+}
+
+@keyframes blink{
+  0%,100%{opacity:1}
+  50%{opacity:.25}
+}
+
 @media(max-width:600px){
 
   .grid{
@@ -193,8 +208,6 @@ button:active{
 <body>
 
 <div class="container">
-
-<!-- HEADER -->
 
 <div class="header">
 
@@ -381,10 +394,6 @@ const cameraData = {
 
     "佐渡市":[
 
-      /*
-       * 実画像URLを確認できたカメラ
-       */
-
       {
         name:"佐渡市大小",
         type:"一般道カメラ",
@@ -392,15 +401,11 @@ const cameraData = {
         source:"にいがたLIVEカメラ / 新潟県土木部",
 
         image:
-        "https://www.live-cam.pref.niigata.jp/camera/pc/daisyou.jpeg"
+        "https://www.live-cam.pref.niigata.jp/camera/pc/daisyou.jpeg",
+
+        interval:120000
 
       },
-
-
-      /*
-       * 以下は登録情報のみ。
-       * 直接画像URLは勝手に設定していません。
-       */
 
       {
         name:"大野亀",
@@ -633,29 +638,29 @@ const cameraData = {
 
 function showPrefectures(){
 
-  const menu=
+  const menu =
     document.getElementById("cameraMenu");
 
-  const path=
+  const path =
     document.getElementById("cameraPath");
 
-  menu.innerHTML="";
+  menu.innerHTML = "";
 
-  path.textContent=
+  path.textContent =
     "JAPAN / ALL PREFECTURES";
 
 
-  prefectures.forEach(pref=>{
+  prefectures.forEach(pref => {
 
-    const button=
+    const button =
       document.createElement("button");
 
-    button.className="full";
+    button.className = "full";
 
-    button.textContent=
-      "▸ "+pref;
+    button.textContent =
+      "▸ " + pref;
 
-    button.onclick=()=>{
+    button.onclick = () => {
       showCities(pref);
     };
 
@@ -672,27 +677,27 @@ function showPrefectures(){
 
 function showCities(pref){
 
-  const menu=
+  const menu =
     document.getElementById("cameraMenu");
 
-  const path=
+  const path =
     document.getElementById("cameraPath");
 
-  menu.innerHTML="";
+  menu.innerHTML = "";
 
-  path.textContent=
-    "JAPAN / "+pref;
+  path.textContent =
+    "JAPAN / " + pref;
 
 
-  const back=
+  const back =
     document.createElement("button");
 
-  back.className="full";
+  back.className = "full";
 
-  back.textContent=
+  back.textContent =
     "← ALL PREFECTURES";
 
-  back.onclick=
+  back.onclick =
     showPrefectures;
 
   menu.appendChild(back);
@@ -700,12 +705,12 @@ function showCities(pref){
 
   if(!cameraData[pref]){
 
-    const info=
+    const info =
       document.createElement("div");
 
-    info.className="small";
+    info.className = "small";
 
-    info.innerHTML=
+    info.innerHTML =
       "<br>この都道府県のカメラデータは"+
       "まだ登録されていません。";
 
@@ -717,17 +722,17 @@ function showCities(pref){
 
 
   Object.keys(cameraData[pref])
-  .forEach(city=>{
+  .forEach(city => {
 
-    const button=
+    const button =
       document.createElement("button");
 
-    button.className="full";
+    button.className = "full";
 
-    button.textContent=
-      "▸ "+city;
+    button.textContent =
+      "▸ " + city;
 
-    button.onclick=()=>{
+    button.onclick = () => {
       showCameras(pref,city);
     };
 
@@ -744,27 +749,27 @@ function showCities(pref){
 
 function showCameras(pref,city){
 
-  const menu=
+  const menu =
     document.getElementById("cameraMenu");
 
-  const path=
+  const path =
     document.getElementById("cameraPath");
 
-  menu.innerHTML="";
+  menu.innerHTML = "";
 
-  path.textContent=
-    "JAPAN / "+pref+" / "+city;
+  path.textContent =
+    "JAPAN / " + pref + " / " + city;
 
 
-  const back=
+  const back =
     document.createElement("button");
 
-  back.className="full";
+  back.className = "full";
 
-  back.textContent=
-    "← "+pref;
+  back.textContent =
+    "← " + pref;
 
-  back.onclick=()=>{
+  back.onclick = () => {
     showCities(pref);
   };
 
@@ -772,17 +777,17 @@ function showCameras(pref,city){
 
 
   cameraData[pref][city]
-  .forEach(camera=>{
+  .forEach(camera => {
 
-    const button=
+    const button =
       document.createElement("button");
 
-    button.className="full";
+    button.className = "full";
 
-    button.textContent=
-      "📹 "+camera.name;
+    button.textContent =
+      "📹 " + camera.name;
 
-    button.onclick=()=>{
+    button.onclick = () => {
       showCamera(camera,pref,city);
     };
 
@@ -794,38 +799,175 @@ function showCameras(pref,city){
 
 
 /* =====================================================
+   カメラ自動更新
+===================================================== */
+
+let currentCamera = null;
+
+let cameraRefreshTimer = null;
+
+let cameraCountdownTimer = null;
+
+let cameraNextUpdate = 120;
+
+
+function stopCameraAutoRefresh(){
+
+  if(cameraRefreshTimer){
+
+    clearInterval(cameraRefreshTimer);
+
+    cameraRefreshTimer = null;
+
+  }
+
+  if(cameraCountdownTimer){
+
+    clearInterval(cameraCountdownTimer);
+
+    cameraCountdownTimer = null;
+
+  }
+
+}
+
+
+function formatCountdown(seconds){
+
+  const minutes =
+    Math.floor(seconds / 60);
+
+  const secs =
+    seconds % 60;
+
+  return String(minutes).padStart(2,"0")
+    + ":"
+    + String(secs).padStart(2,"0");
+
+}
+
+
+function updateCameraCountdown(){
+
+  const element =
+    document.getElementById(
+      "cameraCountdown"
+    );
+
+  if(!element) return;
+
+  element.textContent =
+    "NEXT UPDATE : "
+    + formatCountdown(cameraNextUpdate);
+
+}
+
+
+function startCameraAutoRefresh(){
+
+  stopCameraAutoRefresh();
+
+  if(
+    !currentCamera ||
+    !currentCamera.image
+  ){
+    return;
+  }
+
+
+  const interval =
+    currentCamera.interval || 120000;
+
+
+  cameraNextUpdate =
+    Math.ceil(interval / 1000);
+
+  updateCameraCountdown();
+
+
+  cameraCountdownTimer =
+    setInterval(() => {
+
+      cameraNextUpdate--;
+
+      if(cameraNextUpdate < 0){
+
+        cameraNextUpdate =
+          Math.ceil(interval / 1000);
+
+      }
+
+      updateCameraCountdown();
+
+    },1000);
+
+
+  cameraRefreshTimer =
+    setInterval(() => {
+
+      const image =
+        document.getElementById(
+          "liveCameraImage"
+        );
+
+      if(!image) return;
+
+
+      image.src =
+        currentCamera.image
+        + "?t="
+        + Date.now();
+
+
+      cameraNextUpdate =
+        Math.ceil(interval / 1000);
+
+      updateCameraCountdown();
+
+    },interval);
+
+}
+
+
+/* =====================================================
    カメラ表示
 ===================================================== */
 
-let currentCamera=null;
-
-
 function showCamera(camera,pref,city){
 
-  const view=
-    document.getElementById("cameraView");
+  stopCameraAutoRefresh();
 
-  const info=
-    document.getElementById("cameraInfo");
-
-
-  currentCamera=camera;
-
-  view.style.display="block";
+  currentCamera =
+    camera;
 
 
-  let imageHTML="";
+  const view =
+    document.getElementById(
+      "cameraView"
+    );
+
+  const info =
+    document.getElementById(
+      "cameraInfo"
+    );
+
+
+  view.style.display =
+    "block";
+
+
+  let imageHTML = "";
 
 
   if(camera.image){
 
-    imageHTML=`
+    imageHTML = `
 
       <div class="cameraImageBox">
 
         <div class="cameraLiveBadge">
 
-          <span class="live">
+          <span class="live liveDot">
             ● LIVE IMAGE
           </span>
 
@@ -844,11 +986,32 @@ function showCamera(camera,pref,city){
 
       </div>
 
+
+      <div class="autoStatus">
+
+        <span class="live">
+          ● AUTO UPDATE : ONLINE
+        </span>
+
+        <br>
+
+        SOURCE UPDATE :
+        ${camera.update}
+
+        <div
+          id="cameraCountdown"
+          class="cameraCountdown"
+        >
+          NEXT UPDATE : --:--
+        </div>
+
+      </div>
+
     `;
 
   }else{
 
-    imageHTML=`
+    imageHTML = `
 
       <div class="cameraError">
 
@@ -868,6 +1031,7 @@ function showCamera(camera,pref,city){
         <br><br>
 
         CAMERA STATUS :
+
         <span class="live">
           OFFICIAL SOURCE VERIFIED
         </span>
@@ -879,7 +1043,7 @@ function showCamera(camera,pref,city){
   }
 
 
-  info.innerHTML=`
+  info.innerHTML = `
 
     <div class="cameraBox">
 
@@ -925,7 +1089,7 @@ function showCamera(camera,pref,city){
         class="full"
         onclick="refreshCamera()"
       >
-        ↻ REFRESH CAMERA
+        ↻ REFRESH CAMERA NOW
       </button>
       `
       :
@@ -939,6 +1103,13 @@ function showCamera(camera,pref,city){
     behavior:"smooth"
   });
 
+
+  if(camera.image){
+
+    startCameraAutoRefresh();
+
+  }
+
 }
 
 
@@ -948,7 +1119,9 @@ function showCamera(camera,pref,city){
 
 function cameraImageError(){
 
-  const img=
+  stopCameraAutoRefresh();
+
+  const img =
     document.getElementById(
       "liveCameraImage"
     );
@@ -956,7 +1129,7 @@ function cameraImageError(){
   if(!img) return;
 
 
-  img.outerHTML=`
+  img.outerHTML = `
 
     <div class="cameraError">
 
@@ -970,6 +1143,7 @@ function cameraImageError(){
       <br><br>
 
       CAMERA STATUS :
+
       <span class="live">
         SOURCE REGISTERED
       </span>
@@ -982,12 +1156,20 @@ function cameraImageError(){
 
 
 /* =====================================================
-   カメラ更新
+   手動更新
 ===================================================== */
 
 function refreshCamera(){
 
-  const img=
+  if(
+    !currentCamera ||
+    !currentCamera.image
+  ){
+    return;
+  }
+
+
+  const img =
     document.getElementById(
       "liveCameraImage"
     );
@@ -995,12 +1177,20 @@ function refreshCamera(){
   if(!img) return;
 
 
-  const base=
-    img.src.split("?")[0];
+  img.src =
+    currentCamera.image
+    + "?t="
+    + Date.now();
 
 
-  img.src=
-    base+"?t="+Date.now();
+  cameraNextUpdate =
+    Math.ceil(
+      (currentCamera.interval || 120000)
+      / 1000
+    );
+
+
+  updateCameraCountdown();
 
 }
 
@@ -1011,7 +1201,7 @@ function refreshCamera(){
 
 function startVoice(){
 
-  const SpeechRecognition=
+  const SpeechRecognition =
     window.SpeechRecognition ||
     window.webkitSpeechRecognition;
 
@@ -1027,51 +1217,58 @@ function startVoice(){
   }
 
 
-  const recognition=
+  const recognition =
     new SpeechRecognition();
 
 
-  recognition.lang="ja-JP";
+  recognition.lang =
+    "ja-JP";
 
-  recognition.interimResults=false;
+  recognition.interimResults =
+    false;
 
-  recognition.continuous=false;
+  recognition.continuous =
+    false;
 
 
-  recognition.onstart=()=>{
+  recognition.onstart = () => {
 
     document.getElementById(
       "result"
-    ).textContent=
+    ).textContent =
       "🎙 LISTENING...";
 
   };
 
 
-  recognition.onresult=(event)=>{
+  recognition.onresult =
+    (event) => {
 
-    const text=
-      event.results[0][0].transcript;
-
-
-    document.getElementById(
-      "query"
-    ).value=text;
+      const text =
+        event.results[0][0]
+        .transcript;
 
 
-    analyze();
+      document.getElementById(
+        "query"
+      ).value =
+        text;
 
-  };
+
+      analyze();
+
+    };
 
 
-  recognition.onerror=()=>{
+  recognition.onerror =
+    () => {
 
-    document.getElementById(
-      "result"
-    ).textContent=
-      "VOICE ERROR";
+      document.getElementById(
+        "result"
+      ).textContent =
+        "VOICE ERROR";
 
-  };
+    };
 
 
   recognition.start();
@@ -1085,13 +1282,13 @@ function startVoice(){
 
 function analyze(){
 
-  const input=
+  const input =
     document.getElementById(
       "query"
     ).value.trim();
 
 
-  const result=
+  const result =
     document.getElementById(
       "result"
     );
@@ -1099,7 +1296,7 @@ function analyze(){
 
   if(!input){
 
-    result.textContent=
+    result.textContent =
       "QUERY EMPTY";
 
     return;
@@ -1107,17 +1304,23 @@ function analyze(){
   }
 
 
-  result.textContent=
-    "ANALYZING...\n"+
+  result.textContent =
+    "ANALYZING...\n"
+    +
     "SCANNING INFORMATION NETWORK...";
 
 
-  setTimeout(()=>{
+  setTimeout(() => {
 
-    let answer=
-      "QUERY RECEIVED\n\n"+
-      "「"+input+"」\n\n"+
-      "TACTICAL AI:\n"+
+    let answer =
+      "QUERY RECEIVED\n\n"
+      +
+      "「"
+      + input
+      + "」\n\n"
+      +
+      "TACTICAL AI:\n"
+      +
       "現在は公開情報検索モジュールを使用できます。";
 
 
@@ -1126,9 +1329,11 @@ function analyze(){
       input.includes("ライブ")
     ){
 
-      answer=
-        "LIVE CAMERA NETWORK\n\n"+
-        "全国 → 都道府県 → 市区町村 → カメラ\n"+
+      answer =
+        "LIVE CAMERA NETWORK\n\n"
+        +
+        "全国 → 都道府県 → 市区町村 → カメラ\n"
+        +
         "の順番で選択してください。";
 
     }
@@ -1139,14 +1344,15 @@ function analyze(){
       input.includes("気温")
     ){
 
-      answer=
-        "WEATHER REQUEST\n\n"+
+      answer =
+        "WEATHER REQUEST\n\n"
+        +
         "WEATHER SCANを実行してください。";
 
     }
 
 
-    result.textContent=
+    result.textContent =
       answer;
 
   },700);
@@ -1160,13 +1366,15 @@ function analyze(){
 
 function speakResult(){
 
-  const text=
+  const text =
     document.getElementById(
       "result"
     ).textContent;
 
 
-  if(!("speechSynthesis" in window)){
+  if(
+    !("speechSynthesis" in window)
+  ){
 
     alert(
       "音声読み上げに対応していません。"
@@ -1180,18 +1388,25 @@ function speakResult(){
   speechSynthesis.cancel();
 
 
-  const speech=
-    new SpeechSynthesisUtterance(text);
+  const speech =
+    new SpeechSynthesisUtterance(
+      text
+    );
 
 
-  speech.lang="ja-JP";
+  speech.lang =
+    "ja-JP";
 
-  speech.rate=1;
+  speech.rate =
+    1;
 
-  speech.pitch=.9;
+  speech.pitch =
+    .9;
 
 
-  speechSynthesis.speak(speech);
+  speechSynthesis.speak(
+    speech
+  );
 
 }
 
@@ -1202,64 +1417,96 @@ function speakResult(){
 
 async function getWeather(){
 
-  const weather=
+  const weather =
     document.getElementById(
       "weather"
     );
 
 
-  weather.textContent=
+  weather.textContent =
     "SCANNING WEATHER...";
 
 
   try{
 
-    const url=
-      "https://api.open-meteo.com/v1/forecast"+
-      "?latitude=35.6762"+
-      "&longitude=139.6503"+
-      "&current=temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m,weather_code"+
+    const url =
+      "https://api.open-meteo.com/v1/forecast"
+      +
+      "?latitude=35.6762"
+      +
+      "&longitude=139.6503"
+      +
+      "&current=temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m,weather_code"
+      +
       "&timezone=Asia%2FTokyo";
 
 
-    const response=
+    const response =
       await fetch(url);
 
 
     if(!response.ok){
-      throw new Error("Weather API error");
+
+      throw new Error(
+        "Weather API error"
+      );
+
     }
 
 
-    const data=
+    const data =
       await response.json();
 
 
-    const c=
+    const c =
       data.current;
 
 
-    weather.textContent=
-      "LOCATION : TOKYO\n\n"+
-      "TEMP     : "+
-      c.temperature_2m+
-      " °C\n"+
-      "FEELS    : "+
-      c.apparent_temperature+
-      " °C\n"+
-      "HUMIDITY : "+
-      c.relative_humidity_2m+
-      " %\n"+
-      "WIND     : "+
-      c.wind_speed_10m+
-      " km/h\n\n"+
+    weather.textContent =
+
+      "LOCATION : TOKYO\n\n"
+
+      +
+
+      "TEMP     : "
+      +
+      c.temperature_2m
+      +
+      " °C\n"
+
+      +
+
+      "FEELS    : "
+      +
+      c.apparent_temperature
+      +
+      " °C\n"
+
+      +
+
+      "HUMIDITY : "
+      +
+      c.relative_humidity_2m
+      +
+      " %\n"
+
+      +
+
+      "WIND     : "
+      +
+      c.wind_speed_10m
+      +
+      " km/h\n\n"
+
+      +
+
       "● WEATHER DATA RECEIVED";
 
   }
 
   catch(error){
 
-    weather.textContent=
+    weather.textContent =
       "WEATHER CONNECTION ERROR";
 
   }
@@ -1275,10 +1522,12 @@ document
 .getElementById("query")
 .addEventListener(
   "keydown",
-  event=>{
+  event => {
 
-    if(event.key==="Enter"){
+    if(event.key === "Enter"){
+
       analyze();
+
     }
 
   }
