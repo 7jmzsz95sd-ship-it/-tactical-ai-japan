@@ -21,7 +21,7 @@ body{
   margin:auto;
 }
 
-.panel{
+.panel,.header{
   border:1px solid #1d7f43;
   background:#030a06;
   padding:12px;
@@ -29,9 +29,7 @@ body{
 }
 
 .header{
-  border:1px solid #1d7f43;
   padding:15px;
-  margin-bottom:10px;
 }
 
 .logo{
@@ -129,7 +127,8 @@ button:active{
   margin-top:10px;
 }
 
-.cameraImageBox{
+.cameraImageBox,
+.videoBox{
   border:1px solid #1d7f43;
   padding:5px;
   margin-top:10px;
@@ -142,6 +141,13 @@ button:active{
   height:auto;
   min-height:180px;
   object-fit:contain;
+  background:#000;
+}
+
+.cameraVideo{
+  display:block;
+  width:100%;
+  max-height:520px;
   background:#000;
 }
 
@@ -182,6 +188,14 @@ button:active{
   letter-spacing:1px;
 }
 
+.modeTag{
+  display:inline-block;
+  padding:3px 7px;
+  border:1px solid #1d7f43;
+  margin-top:5px;
+  font-size:10px;
+}
+
 @keyframes blink{
   0%,100%{opacity:1}
   50%{opacity:.25}
@@ -211,18 +225,18 @@ button:active{
 
 <div class="header">
 
-  <div class="logo">
-    TACTICAL AI // JAPAN
-  </div>
+<div class="logo">
+TACTICAL AI // JAPAN
+</div>
 
-  <div class="sub">
-    NATIONAL INFORMATION TERMINAL
-  </div>
+<div class="sub">
+NATIONAL INFORMATION TERMINAL
+</div>
 
-  <div class="status">
-    <span class="dot"></span>
-    SYSTEM ONLINE
-  </div>
+<div class="status">
+<span class="dot"></span>
+SYSTEM ONLINE
+</div>
 
 </div>
 
@@ -231,34 +245,34 @@ button:active{
 
 <div class="panel">
 
-  <div class="title">
-    // TACTICAL AI
-  </div>
+<div class="title">
+// TACTICAL AI
+</div>
 
-  <div class="row">
+<div class="row">
 
-    <input
-      id="query"
-      placeholder="質問を入力..."
-    >
+<input
+id="query"
+placeholder="質問を入力..."
+>
 
-    <button onclick="analyze()">
-      ANALYZE
-    </button>
+<button onclick="analyze()">
+ANALYZE
+</button>
 
-  </div>
+</div>
 
-  <button onclick="startVoice()">
-    🎙 VOICE
-  </button>
+<button onclick="startVoice()">
+🎙 VOICE
+</button>
 
-  <button onclick="speakResult()">
-    🔊 SPEAK
-  </button>
+<button onclick="speakResult()">
+🔊 SPEAK
+</button>
 
-  <div id="result" class="result">
+<div id="result" class="result">
 SYSTEM READY...
-  </div>
+</div>
 
 </div>
 
@@ -267,17 +281,17 @@ SYSTEM READY...
 
 <div class="panel">
 
-  <div class="title">
-    // WEATHER
-  </div>
+<div class="title">
+// WEATHER
+</div>
 
-  <button onclick="getWeather()">
-    WEATHER SCAN
-  </button>
+<button onclick="getWeather()">
+WEATHER SCAN
+</button>
 
-  <div id="weather" class="result">
+<div id="weather" class="result">
 READY.
-  </div>
+</div>
 
 </div>
 
@@ -286,15 +300,15 @@ READY.
 
 <div class="panel">
 
-  <div class="title">
-    // JAPAN LIVE CAMERA NETWORK
-  </div>
+<div class="title">
+// JAPAN LIVE CAMERA NETWORK
+</div>
 
-  <div id="cameraPath" class="small">
-    JAPAN / ALL PREFECTURES
-  </div>
+<div id="cameraPath" class="small">
+JAPAN / ALL PREFECTURES
+</div>
 
-  <div id="cameraMenu" class="grid"></div>
+<div id="cameraMenu" class="grid"></div>
 
 </div>
 
@@ -302,16 +316,16 @@ READY.
 <!-- CAMERA VIEW -->
 
 <div
-  id="cameraView"
-  class="panel"
-  style="display:none"
+id="cameraView"
+class="panel"
+style="display:none"
 >
 
-  <div class="title">
-    // CAMERA INTELLIGENCE
-  </div>
+<div class="title">
+// CAMERA INTELLIGENCE
+</div>
 
-  <div id="cameraInfo"></div>
+<div id="cameraInfo"></div>
 
 </div>
 
@@ -324,62 +338,62 @@ READY.
    都道府県
 ===================================================== */
 
-const prefectures = [
+const prefectures=[
 
-  "北海道",
-  "青森県",
-  "岩手県",
-  "宮城県",
-  "秋田県",
-  "山形県",
-  "福島県",
+"北海道",
+"青森県",
+"岩手県",
+"宮城県",
+"秋田県",
+"山形県",
+"福島県",
 
-  "茨城県",
-  "栃木県",
-  "群馬県",
-  "埼玉県",
-  "千葉県",
-  "東京都",
-  "神奈川県",
+"茨城県",
+"栃木県",
+"群馬県",
+"埼玉県",
+"千葉県",
+"東京都",
+"神奈川県",
 
-  "新潟県",
-  "富山県",
-  "石川県",
-  "福井県",
-  "山梨県",
-  "長野県",
+"新潟県",
+"富山県",
+"石川県",
+"福井県",
+"山梨県",
+"長野県",
 
-  "岐阜県",
-  "静岡県",
-  "愛知県",
-  "三重県",
+"岐阜県",
+"静岡県",
+"愛知県",
+"三重県",
 
-  "滋賀県",
-  "京都府",
-  "大阪府",
-  "兵庫県",
-  "奈良県",
-  "和歌山県",
+"滋賀県",
+"京都府",
+"大阪府",
+"兵庫県",
+"奈良県",
+"和歌山県",
 
-  "鳥取県",
-  "島根県",
-  "岡山県",
-  "広島県",
-  "山口県",
+"鳥取県",
+"島根県",
+"岡山県",
+"広島県",
+"山口県",
 
-  "徳島県",
-  "香川県",
-  "愛媛県",
-  "高知県",
+"徳島県",
+"香川県",
+"愛媛県",
+"高知県",
 
-  "福岡県",
-  "佐賀県",
-  "長崎県",
-  "熊本県",
-  "大分県",
-  "宮崎県",
-  "鹿児島県",
-  "沖縄県"
+"福岡県",
+"佐賀県",
+"長崎県",
+"熊本県",
+"大分県",
+"宮崎県",
+"鹿児島県",
+"沖縄県"
 
 ];
 
@@ -388,285 +402,428 @@ const prefectures = [
    カメラデータ
 ===================================================== */
 
-const cameraData = {
+/*
+mode:
 
-  "新潟県":{
+video = 動画ストリーム
+image = 自動更新画像
+link  = 公式ページ
 
-    "佐渡市":[
+*/
 
-      {
-        name:"佐渡市大小",
-        type:"一般道カメラ",
-        update:"約2分間隔",
-        source:"にいがたLIVEカメラ / 新潟県土木部",
+const cameraData={
 
-        image:
-        "https://www.live-cam.pref.niigata.jp/camera/pc/daisyou.jpeg",
+"新潟県":{
 
-        interval:120000
+"佐渡市":[
 
-      },
+{
+name:"佐渡市大小",
+type:"一般道カメラ",
+mode:"image",
+update:"約2分間隔",
+source:"にいがたLIVEカメラ / 新潟県土木部",
 
-      {
-        name:"大野亀",
-        type:"地域カメラ",
-        update:"約1分間隔",
-        source:"佐渡市公式"
-      },
+image:
+"https://www.live-cam.pref.niigata.jp/camera/pc/daisyou.jpeg",
 
-      {
-        name:"岩谷口",
-        type:"地域カメラ",
-        update:"約1分間隔",
-        source:"佐渡市公式"
-      },
+interval:120000
+},
 
-      {
-        name:"入川",
-        type:"地域カメラ",
-        update:"約1分間隔",
-        source:"佐渡市公式"
-      },
+{
+name:"大野亀",
+type:"地域カメラ",
+mode:"link",
+update:"約1分間隔",
+source:"佐渡市公式",
+url:"https://www.city.sado.niigata.jp/soshiki/2003/46544.html"
+},
 
-      {
-        name:"姫津",
-        type:"地域カメラ",
-        update:"約1分間隔",
-        source:"佐渡市公式"
-      },
+{
+name:"岩谷口",
+type:"地域カメラ",
+mode:"link",
+update:"約1分間隔",
+source:"佐渡市公式",
+url:"https://www.city.sado.niigata.jp/soshiki/2003/46544.html"
+},
 
-      {
-        name:"浦川",
-        type:"地域カメラ",
-        update:"約1分間隔",
-        source:"佐渡市公式"
-      },
+{
+name:"入川",
+type:"地域カメラ",
+mode:"link",
+update:"約1分間隔",
+source:"佐渡市公式",
+url:"https://www.city.sado.niigata.jp/soshiki/2003/46544.html"
+},
 
-      {
-        name:"吉住",
-        type:"地域カメラ",
-        update:"約1分間隔",
-        source:"佐渡市公式"
-      },
+{
+name:"姫津",
+type:"地域カメラ",
+mode:"link",
+update:"約1分間隔",
+source:"佐渡市公式",
+url:"https://www.city.sado.niigata.jp/soshiki/2003/46544.html"
+},
 
-      {
-        name:"両津大川",
-        type:"地域カメラ",
-        update:"約1分間隔",
-        source:"佐渡市公式"
-      },
+{
+name:"浦川",
+type:"地域カメラ",
+mode:"link",
+update:"約1分間隔",
+source:"佐渡市公式",
+url:"https://www.city.sado.niigata.jp/soshiki/2003/46544.html"
+},
 
-      {
-        name:"新穂ダム",
-        type:"地域カメラ",
-        update:"約1分間隔",
-        source:"佐渡市公式"
-      },
+{
+name:"吉住",
+type:"地域カメラ",
+mode:"link",
+update:"約1分間隔",
+source:"佐渡市公式",
+url:"https://www.city.sado.niigata.jp/soshiki/2003/46544.html"
+},
 
-      {
-        name:"赤玉",
-        type:"地域カメラ",
-        update:"約1分間隔",
-        source:"佐渡市公式"
-      },
+{
+name:"両津大川",
+type:"地域カメラ",
+mode:"link",
+update:"約1分間隔",
+source:"佐渡市公式",
+url:"https://www.city.sado.niigata.jp/soshiki/2003/46544.html"
+},
 
-      {
-        name:"松ヶ崎",
-        type:"地域カメラ",
-        update:"約1分間隔",
-        source:"佐渡市公式"
-      },
+{
+name:"新穂ダム",
+type:"地域カメラ",
+mode:"link",
+update:"約1分間隔",
+source:"佐渡市公式",
+url:"https://www.city.sado.niigata.jp/soshiki/2003/46544.html"
+},
 
-      {
-        name:"赤泊港",
-        type:"地域カメラ",
-        update:"約1分間隔",
-        source:"佐渡市公式"
-      },
+{
+name:"赤玉",
+type:"地域カメラ",
+mode:"link",
+update:"約1分間隔",
+source:"佐渡市公式",
+url:"https://www.city.sado.niigata.jp/soshiki/2003/46544.html"
+},
 
-      {
-        name:"小木港",
-        type:"地域カメラ",
-        update:"約1分間隔",
-        source:"佐渡市公式"
-      },
+{
+name:"松ヶ崎",
+type:"地域カメラ",
+mode:"link",
+update:"約1分間隔",
+source:"佐渡市公式",
+url:"https://www.city.sado.niigata.jp/soshiki/2003/46544.html"
+},
 
-      {
-        name:"沢崎",
-        type:"地域カメラ",
-        update:"約1分間隔",
-        source:"佐渡市公式"
-      },
+{
+name:"赤泊港",
+type:"地域カメラ",
+mode:"link",
+update:"約1分間隔",
+source:"佐渡市公式",
+url:"https://www.city.sado.niigata.jp/soshiki/2003/46544.html"
+},
 
-      {
-        name:"木流",
-        type:"地域カメラ",
-        update:"約1分間隔",
-        source:"佐渡市公式"
-      },
+{
+name:"小木港",
+type:"地域カメラ",
+mode:"link",
+update:"約1分間隔",
+source:"佐渡市公式",
+url:"https://www.city.sado.niigata.jp/soshiki/2003/46544.html"
+},
 
-      {
-        name:"二見港",
-        type:"地域カメラ",
-        update:"約1分間隔",
-        source:"佐渡市公式"
-      },
+{
+name:"沢崎",
+type:"地域カメラ",
+mode:"link",
+update:"約1分間隔",
+source:"佐渡市公式",
+url:"https://www.city.sado.niigata.jp/soshiki/2003/46544.html"
+},
 
-      {
-        name:"背合",
-        type:"地域カメラ",
-        update:"約1分間隔",
-        source:"佐渡市公式"
-      },
+{
+name:"木流",
+type:"地域カメラ",
+mode:"link",
+update:"約1分間隔",
+source:"佐渡市公式",
+url:"https://www.city.sado.niigata.jp/soshiki/2003/46544.html"
+},
 
-      {
-        name:"八幡",
-        type:"地域カメラ",
-        update:"約1分間隔",
-        source:"佐渡市公式"
-      }
+{
+name:"二見港",
+type:"地域カメラ",
+mode:"link",
+update:"約1分間隔",
+source:"佐渡市公式",
+url:"https://www.city.sado.niigata.jp/soshiki/2003/46544.html"
+},
 
-    ],
+{
+name:"背合",
+type:"地域カメラ",
+mode:"link",
+update:"約1分間隔",
+source:"佐渡市公式",
+url:"https://www.city.sado.niigata.jp/soshiki/2003/46544.html"
+},
 
+{
+name:"八幡",
+type:"地域カメラ",
+mode:"link",
+update:"約1分間隔",
+source:"佐渡市公式",
+url:"https://www.city.sado.niigata.jp/soshiki/2003/46544.html"
+}
 
-    "新潟市":[
+],
 
-      {
-        name:"国道7号 東堀前通",
-        type:"一般道カメラ",
-        update:"公式サイト",
-        source:"にいがたLIVEカメラ"
-      },
+"新潟市":[
 
-      {
-        name:"国道7号 競馬場IC",
-        type:"一般道カメラ",
-        update:"公式サイト",
-        source:"にいがたLIVEカメラ"
-      },
+{
+name:"国道7号 東堀前通",
+type:"一般道カメラ",
+mode:"link",
+update:"公式サイト",
+source:"にいがたLIVEカメラ",
+url:"https://www.live-cam.pref.niigata.jp/"
+},
 
-      {
-        name:"国道7号 海老ヶ瀬IC",
-        type:"一般道カメラ",
-        update:"公式サイト",
-        source:"にいがたLIVEカメラ"
-      },
+{
+name:"国道7号 競馬場IC",
+type:"一般道カメラ",
+mode:"link",
+update:"公式サイト",
+source:"にいがたLIVEカメラ",
+url:"https://www.live-cam.pref.niigata.jp/"
+},
 
-      {
-        name:"国道8号 桜木IC",
-        type:"一般道カメラ",
-        update:"公式サイト",
-        source:"にいがたLIVEカメラ"
-      },
+{
+name:"国道7号 海老ヶ瀬IC",
+type:"一般道カメラ",
+mode:"link",
+update:"公式サイト",
+source:"にいがたLIVEカメラ",
+url:"https://www.live-cam.pref.niigata.jp/"
+}
 
-      {
-        name:"国道49号 姥ヶ山IC",
-        type:"一般道カメラ",
-        update:"公式サイト",
-        source:"にいがたLIVEカメラ"
-      },
+],
 
-      {
-        name:"国道116号 美咲町",
-        type:"一般道カメラ",
-        update:"公式サイト",
-        source:"にいがたLIVEカメラ"
-      }
+"村上市":[
 
-    ],
+{
+name:"国道7号 潟端",
+type:"一般道カメラ",
+mode:"link",
+update:"公式サイト",
+source:"にいがたLIVEカメラ",
+url:"https://www.live-cam.pref.niigata.jp/"
+},
 
+{
+name:"国道7号 大須戸",
+type:"一般道カメラ",
+mode:"link",
+update:"公式サイト",
+source:"にいがたLIVEカメラ",
+url:"https://www.live-cam.pref.niigata.jp/"
+}
 
-    "村上市":[
+],
 
-      {
-        name:"国道7号 潟端",
-        type:"一般道カメラ",
-        update:"公式サイト",
-        source:"にいがたLIVEカメラ"
-      },
+"燕市":[
 
-      {
-        name:"国道7号 猿沢",
-        type:"一般道カメラ",
-        update:"公式サイト",
-        source:"にいがたLIVEカメラ"
-      },
+{
+name:"国道116号 新橋",
+type:"一般道カメラ",
+mode:"link",
+update:"公式サイト",
+source:"にいがたLIVEカメラ",
+url:"https://www.live-cam.pref.niigata.jp/"
+}
 
-      {
-        name:"国道7号 大須戸",
-        type:"一般道カメラ",
-        update:"公式サイト",
-        source:"にいがたLIVEカメラ"
-      },
+]
 
-      {
-        name:"国道345号 寒川",
-        type:"一般道カメラ",
-        update:"公式サイト",
-        source:"にいがたLIVEカメラ"
-      }
-
-    ],
-
-
-    "燕市":[
-
-      {
-        name:"国道116号 新橋",
-        type:"一般道カメラ",
-        update:"公式サイト",
-        source:"にいがたLIVEカメラ"
-      },
-
-      {
-        name:"国道116号 見晴橋",
-        type:"一般道カメラ",
-        update:"公式サイト",
-        source:"にいがたLIVEカメラ"
-      }
-
-    ]
-
-  }
+}
 
 };
 
 
 /* =====================================================
-   都道府県一覧
+   カメラ自動更新
+===================================================== */
+
+let currentCamera=null;
+let cameraRefreshTimer=null;
+let cameraCountdownTimer=null;
+let cameraNextUpdate=120;
+
+
+function stopCameraAutoRefresh(){
+
+if(cameraRefreshTimer){
+clearInterval(cameraRefreshTimer);
+cameraRefreshTimer=null;
+}
+
+if(cameraCountdownTimer){
+clearInterval(cameraCountdownTimer);
+cameraCountdownTimer=null;
+}
+
+}
+
+
+function formatCountdown(seconds){
+
+return String(
+Math.floor(seconds/60)
+).padStart(2,"0")
++
+":"
++
+String(
+seconds%60
+).padStart(2,"0");
+
+}
+
+
+function updateCameraCountdown(){
+
+const element=
+document.getElementById(
+"cameraCountdown"
+);
+
+if(element){
+
+element.textContent=
+"NEXT UPDATE : "
++
+formatCountdown(
+Math.max(0,cameraNextUpdate)
+);
+
+}
+
+}
+
+
+function startCameraAutoRefresh(){
+
+stopCameraAutoRefresh();
+
+if(
+!currentCamera ||
+currentCamera.mode!=="image" ||
+!currentCamera.image
+){
+return;
+}
+
+const interval=
+currentCamera.interval ||
+120000;
+
+cameraNextUpdate=
+Math.ceil(interval/1000);
+
+updateCameraCountdown();
+
+cameraCountdownTimer=
+setInterval(()=>{
+
+cameraNextUpdate--;
+
+if(cameraNextUpdate<0){
+
+cameraNextUpdate=
+Math.ceil(interval/1000);
+
+}
+
+updateCameraCountdown();
+
+},1000);
+
+
+cameraRefreshTimer=
+setInterval(()=>{
+
+const image=
+document.getElementById(
+"liveCameraImage"
+);
+
+if(!image)return;
+
+image.src=
+currentCamera.image
++
+"?t="
++
+Date.now();
+
+cameraNextUpdate=
+Math.ceil(interval/1000);
+
+updateCameraCountdown();
+
+},interval);
+
+}
+
+
+/* =====================================================
+   都道府県
 ===================================================== */
 
 function showPrefectures(){
 
-  const menu =
-    document.getElementById("cameraMenu");
+const menu=
+document.getElementById(
+"cameraMenu"
+);
 
-  const path =
-    document.getElementById("cameraPath");
+const path=
+document.getElementById(
+"cameraPath"
+);
 
-  menu.innerHTML = "";
+menu.innerHTML="";
 
-  path.textContent =
-    "JAPAN / ALL PREFECTURES";
+path.textContent=
+"JAPAN / ALL PREFECTURES";
 
+prefectures.forEach(pref=>{
 
-  prefectures.forEach(pref => {
+const button=
+document.createElement(
+"button"
+);
 
-    const button =
-      document.createElement("button");
+button.className="full";
 
-    button.className = "full";
+button.textContent=
+"▸ "
++
+pref;
 
-    button.textContent =
-      "▸ " + pref;
+button.onclick=()=>{
+showCities(pref);
+};
 
-    button.onclick = () => {
-      showCities(pref);
-    };
+menu.appendChild(button);
 
-    menu.appendChild(button);
-
-  });
+});
 
 }
 
@@ -677,68 +834,85 @@ function showPrefectures(){
 
 function showCities(pref){
 
-  const menu =
-    document.getElementById("cameraMenu");
+const menu=
+document.getElementById(
+"cameraMenu"
+);
 
-  const path =
-    document.getElementById("cameraPath");
+const path=
+document.getElementById(
+"cameraPath"
+);
 
-  menu.innerHTML = "";
+menu.innerHTML="";
 
-  path.textContent =
-    "JAPAN / " + pref;
-
-
-  const back =
-    document.createElement("button");
-
-  back.className = "full";
-
-  back.textContent =
-    "← ALL PREFECTURES";
-
-  back.onclick =
-    showPrefectures;
-
-  menu.appendChild(back);
+path.textContent=
+"JAPAN / "
++
+pref;
 
 
-  if(!cameraData[pref]){
+const back=
+document.createElement(
+"button"
+);
 
-    const info =
-      document.createElement("div");
+back.className="full";
 
-    info.className = "small";
+back.textContent=
+"← ALL PREFECTURES";
 
-    info.innerHTML =
-      "<br>この都道府県のカメラデータは"+
-      "まだ登録されていません。";
+back.onclick=
+showPrefectures;
 
-    menu.appendChild(info);
-
-    return;
-
-  }
+menu.appendChild(back);
 
 
-  Object.keys(cameraData[pref])
-  .forEach(city => {
+if(!cameraData[pref]){
 
-    const button =
-      document.createElement("button");
+const info=
+document.createElement(
+"div"
+);
 
-    button.className = "full";
+info.className="small";
 
-    button.textContent =
-      "▸ " + city;
+info.innerHTML=
+"<br>この都道府県のカメラはまだ登録されていません。"
++
+"<br><br>公式カメラの追加待ちです。";
 
-    button.onclick = () => {
-      showCameras(pref,city);
-    };
+menu.appendChild(info);
 
-    menu.appendChild(button);
+return;
 
-  });
+}
+
+
+Object.keys(
+cameraData[pref]
+)
+.forEach(city=>{
+
+const button=
+document.createElement(
+"button"
+);
+
+button.className="full";
+
+button.textContent=
+"▸ "
++
+city;
+
+button.onclick=()=>{
+showCameras(pref,city);
+};
+
+menu.appendChild(button);
+
+});
 
 }
 
@@ -749,182 +923,86 @@ function showCities(pref){
 
 function showCameras(pref,city){
 
-  const menu =
-    document.getElementById("cameraMenu");
-
-  const path =
-    document.getElementById("cameraPath");
-
-  menu.innerHTML = "";
-
-  path.textContent =
-    "JAPAN / " + pref + " / " + city;
-
-
-  const back =
-    document.createElement("button");
-
-  back.className = "full";
-
-  back.textContent =
-    "← " + pref;
-
-  back.onclick = () => {
-    showCities(pref);
-  };
-
-  menu.appendChild(back);
-
-
-  cameraData[pref][city]
-  .forEach(camera => {
-
-    const button =
-      document.createElement("button");
-
-    button.className = "full";
-
-    button.textContent =
-      "📹 " + camera.name;
-
-    button.onclick = () => {
-      showCamera(camera,pref,city);
-    };
-
-    menu.appendChild(button);
-
-  });
-
-}
-
-
-/* =====================================================
-   カメラ自動更新
-===================================================== */
-
-let currentCamera = null;
-
-let cameraRefreshTimer = null;
-
-let cameraCountdownTimer = null;
-
-let cameraNextUpdate = 120;
-
-
-function stopCameraAutoRefresh(){
-
-  if(cameraRefreshTimer){
-
-    clearInterval(cameraRefreshTimer);
-
-    cameraRefreshTimer = null;
-
-  }
-
-  if(cameraCountdownTimer){
-
-    clearInterval(cameraCountdownTimer);
-
-    cameraCountdownTimer = null;
-
-  }
-
-}
-
-
-function formatCountdown(seconds){
-
-  const minutes =
-    Math.floor(seconds / 60);
-
-  const secs =
-    seconds % 60;
-
-  return String(minutes).padStart(2,"0")
-    + ":"
-    + String(secs).padStart(2,"0");
-
-}
-
-
-function updateCameraCountdown(){
-
-  const element =
-    document.getElementById(
-      "cameraCountdown"
-    );
-
-  if(!element) return;
-
-  element.textContent =
-    "NEXT UPDATE : "
-    + formatCountdown(cameraNextUpdate);
-
-}
-
-
-function startCameraAutoRefresh(){
-
-  stopCameraAutoRefresh();
-
-  if(
-    !currentCamera ||
-    !currentCamera.image
-  ){
-    return;
-  }
-
-
-  const interval =
-    currentCamera.interval || 120000;
-
-
-  cameraNextUpdate =
-    Math.ceil(interval / 1000);
-
-  updateCameraCountdown();
-
-
-  cameraCountdownTimer =
-    setInterval(() => {
-
-      cameraNextUpdate--;
-
-      if(cameraNextUpdate < 0){
-
-        cameraNextUpdate =
-          Math.ceil(interval / 1000);
-
-      }
-
-      updateCameraCountdown();
-
-    },1000);
-
-
-  cameraRefreshTimer =
-    setInterval(() => {
-
-      const image =
-        document.getElementById(
-          "liveCameraImage"
-        );
-
-      if(!image) return;
-
-
-      image.src =
-        currentCamera.image
-        + "?t="
-        + Date.now();
-
-
-      cameraNextUpdate =
-        Math.ceil(interval / 1000);
-
-      updateCameraCountdown();
-
-    },interval);
+const menu=
+document.getElementById(
+"cameraMenu"
+);
+
+const path=
+document.getElementById(
+"cameraPath"
+);
+
+menu.innerHTML="";
+
+path.textContent=
+"JAPAN / "
++
+pref
++
+" / "
++
+city;
+
+
+const back=
+document.createElement(
+"button"
+);
+
+back.className="full";
+
+back.textContent=
+"← "
++
+pref;
+
+back.onclick=()=>{
+showCities(pref);
+};
+
+menu.appendChild(back);
+
+
+cameraData[pref][city]
+.forEach(camera=>{
+
+const button=
+document.createElement(
+"button"
+);
+
+button.className="full";
+
+const icon=
+camera.mode==="video"
+?
+"🎥"
+:
+camera.mode==="image"
+?
+"📹"
+:
+"🔗";
+
+button.textContent=
+icon
++
+" "
++
+camera.name;
+
+button.onclick=()=>{
+showCamera(
+camera,
+pref,
+city
+);
+};
+
+menu.appendChild(button);
+
+});
 
 }
 
@@ -933,224 +1011,327 @@ function startCameraAutoRefresh(){
    カメラ表示
 ===================================================== */
 
-function showCamera(camera,pref,city){
+function showCamera(
+camera,
+pref,
+city
+){
 
-  stopCameraAutoRefresh();
+stopCameraAutoRefresh();
 
-  currentCamera =
-    camera;
+currentCamera=
+camera;
 
+const view=
+document.getElementById(
+"cameraView"
+);
 
-  const view =
-    document.getElementById(
-      "cameraView"
-    );
+const info=
+document.getElementById(
+"cameraInfo"
+);
 
-  const info =
-    document.getElementById(
-      "cameraInfo"
-    );
+view.style.display=
+"block";
 
 
-  view.style.display =
-    "block";
+let content="";
 
 
-  let imageHTML = "";
+/* VIDEO */
 
+if(
+camera.mode==="video" &&
+camera.stream
+){
 
-  if(camera.image){
+content=`
 
-    imageHTML = `
+<div class="videoBox">
 
-      <div class="cameraImageBox">
+<div class="cameraLiveBadge">
 
-        <div class="cameraLiveBadge">
+<span class="live liveDot">
+● VIDEO STREAM
+</span>
 
-          <span class="live liveDot">
-            ● LIVE IMAGE
-          </span>
+&nbsp;
 
-          &nbsp; // OFFICIAL CAMERA
+// OFFICIAL CAMERA
 
-        </div>
+</div>
 
+<video
+class="cameraVideo"
+id="liveCameraVideo"
+controls
+autoplay
+muted
+playsinline
+></video>
 
-        <img
-          class="cameraImage"
-          id="liveCameraImage"
-          src="${camera.image}?t=${Date.now()}"
-          alt="${camera.name}"
-          onerror="cameraImageError()"
-        >
+</div>
 
-      </div>
+<div class="autoStatus">
 
+<span class="live">
+● VIDEO MODE : ONLINE
+</span>
 
-      <div class="autoStatus">
+<br>
 
-        <span class="live">
-          ● AUTO UPDATE : ONLINE
-        </span>
+STREAM :
+${camera.stream}
 
-        <br>
+</div>
 
-        SOURCE UPDATE :
-        ${camera.update}
+`;
 
-        <div
-          id="cameraCountdown"
-          class="cameraCountdown"
-        >
-          NEXT UPDATE : --:--
-        </div>
+}
 
-      </div>
 
-    `;
+/* IMAGE */
 
-  }else{
+else if(
+camera.mode==="image" &&
+camera.image
+){
 
-    imageHTML = `
+content=`
 
-      <div class="cameraError">
+<div class="cameraImageBox">
 
-        ⚠ LIVE IMAGE NOT AVAILABLE
+<div class="cameraLiveBadge">
 
-        <br><br>
+<span class="live liveDot">
+● LIVE IMAGE
+</span>
 
-        このカメラは公式情報として
-        登録されています。
+&nbsp;
 
-        <br><br>
+// OFFICIAL CAMERA
 
-        ただし、TACTICAL AIから直接表示できる
-        画像URLを確認できていないため、
-        安全のため直接埋め込みを行っていません。
+</div>
 
-        <br><br>
+<img
+class="cameraImage"
+id="liveCameraImage"
+src="${camera.image}?t=${Date.now()}"
+alt="${camera.name}"
+onerror="cameraImageError()"
+>
 
-        CAMERA STATUS :
+</div>
 
-        <span class="live">
-          OFFICIAL SOURCE VERIFIED
-        </span>
 
-      </div>
+<div class="autoStatus">
 
-    `;
+<span class="live">
+● AUTO UPDATE : ONLINE
+</span>
 
-  }
+<br>
 
+SOURCE UPDATE :
+${camera.update}
 
-  info.innerHTML = `
+<div
+id="cameraCountdown"
+class="cameraCountdown"
+>
+NEXT UPDATE : --:--
+</div>
 
-    <div class="cameraBox">
+</div>
 
-      <div class="live">
-        ● CAMERA ONLINE
-      </div>
 
-      <br>
+<button
+class="full"
+onclick="refreshCamera()"
+>
+↻ REFRESH CAMERA NOW
+</button>
 
-      <b>${camera.name}</b>
+`;
 
-      <br><br>
+}
 
-      LOCATION :
-      ${pref} / ${city}
 
-      <br>
+/* OFFICIAL LINK */
 
-      TYPE :
-      ${camera.type}
+else{
 
-      <br>
+content=`
 
-      UPDATE :
-      ${camera.update}
+<div class="cameraError">
 
-      <br>
+⚪ OFFICIAL LINK MODE
 
-      SOURCE :
-      ${camera.source}
+<br><br>
 
-    </div>
+このカメラは公式ページで公開されています。
 
+<br><br>
 
-    ${imageHTML}
+TACTICAL AIから直接動画・画像を
+埋め込めないため、
+公式ページを開きます。
 
+<br><br>
 
-    ${
-      camera.image
-      ?
-      `
-      <button
-        class="full"
-        onclick="refreshCamera()"
-      >
-        ↻ REFRESH CAMERA NOW
-      </button>
-      `
-      :
-      ""
-    }
+<a
+href="${camera.url||"#"}"
+target="_blank"
+rel="noopener"
+style="color:#43ff88"
+>
+▸ OPEN OFFICIAL CAMERA
+</a>
 
-  `;
+</div>
 
+`;
 
-  view.scrollIntoView({
-    behavior:"smooth"
-  });
+}
 
 
-  if(camera.image){
+info.innerHTML=`
 
-    startCameraAutoRefresh();
+<div class="cameraBox">
 
-  }
+<div class="live">
+● CAMERA REGISTERED
+</div>
+
+<br>
+
+<b>
+${camera.name}
+</b>
+
+<br><br>
+
+LOCATION :
+${pref}
+/
+${city}
+
+<br>
+
+TYPE :
+${camera.type}
+
+<br>
+
+UPDATE :
+${camera.update}
+
+<br>
+
+SOURCE :
+${camera.source}
+
+<br>
+
+<div class="modeTag">
+
+MODE :
+${String(
+camera.mode||"link"
+).toUpperCase()}
+
+</div>
+
+</div>
+
+${content}
+
+`;
+
+
+view.scrollIntoView({
+behavior:"smooth"
+});
+
+
+if(camera.mode==="image"){
+
+startCameraAutoRefresh();
+
+}
+
+if(
+camera.mode==="video" &&
+camera.stream
+){
+
+startVideo(
+camera.stream
+);
+
+}
 
 }
 
 
 /* =====================================================
-   カメラ画像エラー
+   動画
+===================================================== */
+
+function startVideo(url){
+
+const video=
+document.getElementById(
+"liveCameraVideo"
+);
+
+if(!video)return;
+
+video.src=url;
+
+video.play().catch(()=>{});
+
+}
+
+
+/* =====================================================
+   画像エラー
 ===================================================== */
 
 function cameraImageError(){
 
-  stopCameraAutoRefresh();
+stopCameraAutoRefresh();
 
-  const img =
-    document.getElementById(
-      "liveCameraImage"
-    );
+const img=
+document.getElementById(
+"liveCameraImage"
+);
 
-  if(!img) return;
+if(!img)return;
 
+img.outerHTML=`
 
-  img.outerHTML = `
+<div class="cameraError">
 
-    <div class="cameraError">
+⚠ CAMERA CONNECTION ERROR
 
-      ⚠ CAMERA CONNECTION ERROR
+<br><br>
 
-      <br><br>
+画像サーバーから画像を
+取得できませんでした。
 
-      画像サーバーから画像を
-      取得できませんでした。
+<br><br>
 
-      <br><br>
+CAMERA STATUS :
 
-      CAMERA STATUS :
+<span class="live">
+SOURCE REGISTERED
+</span>
 
-      <span class="live">
-        SOURCE REGISTERED
-      </span>
+</div>
 
-    </div>
-
-  `;
+`;
 
 }
 
@@ -1161,36 +1342,40 @@ function cameraImageError(){
 
 function refreshCamera(){
 
-  if(
-    !currentCamera ||
-    !currentCamera.image
-  ){
-    return;
-  }
+if(
+!currentCamera ||
+currentCamera.mode!=="image" ||
+!currentCamera.image
+){
+
+return;
+
+}
 
 
-  const img =
-    document.getElementById(
-      "liveCameraImage"
-    );
+const img=
+document.getElementById(
+"liveCameraImage"
+);
 
-  if(!img) return;
-
-
-  img.src =
-    currentCamera.image
-    + "?t="
-    + Date.now();
+if(!img)return;
 
 
-  cameraNextUpdate =
-    Math.ceil(
-      (currentCamera.interval || 120000)
-      / 1000
-    );
+img.src=
+currentCamera.image
++
+"?t="
++
+Date.now();
 
 
-  updateCameraCountdown();
+cameraNextUpdate=
+Math.ceil(
+(currentCamera.interval||120000)
+/1000
+);
+
+updateCameraCountdown();
 
 }
 
@@ -1201,77 +1386,70 @@ function refreshCamera(){
 
 function startVoice(){
 
-  const SpeechRecognition =
-    window.SpeechRecognition ||
-    window.webkitSpeechRecognition;
+const SpeechRecognition=
+window.SpeechRecognition ||
+window.webkitSpeechRecognition;
 
 
-  if(!SpeechRecognition){
+if(!SpeechRecognition){
 
-    alert(
-      "このブラウザでは音声入力に対応していません。"
-    );
+alert(
+"このブラウザでは音声入力に対応していません。"
+);
 
-    return;
+return;
 
-  }
-
-
-  const recognition =
-    new SpeechRecognition();
+}
 
 
-  recognition.lang =
-    "ja-JP";
+const recognition=
+new SpeechRecognition();
 
-  recognition.interimResults =
-    false;
+recognition.lang=
+"ja-JP";
 
-  recognition.continuous =
-    false;
+recognition.interimResults=
+false;
 
-
-  recognition.onstart = () => {
-
-    document.getElementById(
-      "result"
-    ).textContent =
-      "🎙 LISTENING...";
-
-  };
+recognition.continuous=
+false;
 
 
-  recognition.onresult =
-    (event) => {
+recognition.onstart=()=>{
 
-      const text =
-        event.results[0][0]
-        .transcript;
+document.getElementById(
+"result"
+).textContent=
+"🎙 LISTENING...";
 
-
-      document.getElementById(
-        "query"
-      ).value =
-        text;
+};
 
 
-      analyze();
+recognition.onresult=
+event=>{
 
-    };
+document.getElementById(
+"query"
+).value=
+event.results[0][0]
+.transcript;
 
+analyze();
 
-  recognition.onerror =
-    () => {
-
-      document.getElementById(
-        "result"
-      ).textContent =
-        "VOICE ERROR";
-
-    };
+};
 
 
-  recognition.start();
+recognition.onerror=()=>{
+
+document.getElementById(
+"result"
+).textContent=
+"VOICE ERROR";
+
+};
+
+
+recognition.start();
 
 }
 
@@ -1282,80 +1460,85 @@ function startVoice(){
 
 function analyze(){
 
-  const input =
-    document.getElementById(
-      "query"
-    ).value.trim();
+const input=
+document.getElementById(
+"query"
+).value.trim();
+
+const result=
+document.getElementById(
+"result"
+);
 
 
-  const result =
-    document.getElementById(
-      "result"
-    );
+if(!input){
+
+result.textContent=
+"QUERY EMPTY";
+
+return;
+
+}
 
 
-  if(!input){
-
-    result.textContent =
-      "QUERY EMPTY";
-
-    return;
-
-  }
+result.textContent=
+"ANALYZING...\n"
++
+"SCANNING INFORMATION NETWORK...";
 
 
-  result.textContent =
-    "ANALYZING...\n"
-    +
-    "SCANNING INFORMATION NETWORK...";
+setTimeout(()=>{
+
+let answer=
+"QUERY RECEIVED\n\n"
++
+"「"
++
+input
++
+"」\n\n"
++
+"TACTICAL AI:\n"
++
+"現在は公開情報検索モジュールを使用できます。";
 
 
-  setTimeout(() => {
+if(
+input.includes("カメラ") ||
+input.includes("ライブ")
+){
 
-    let answer =
-      "QUERY RECEIVED\n\n"
-      +
-      "「"
-      + input
-      + "」\n\n"
-      +
-      "TACTICAL AI:\n"
-      +
-      "現在は公開情報検索モジュールを使用できます。";
+answer=
+"LIVE CAMERA NETWORK\n\n"
++
+"全国 → 都道府県 → 市区町村 → カメラ\n"
++
+"の順番で選択してください。\n\n"
++
+"VIDEO STREAM / LIVE IMAGE / OFFICIAL LINK\n"
++
+"に対応。";
 
-
-    if(
-      input.includes("カメラ") ||
-      input.includes("ライブ")
-    ){
-
-      answer =
-        "LIVE CAMERA NETWORK\n\n"
-        +
-        "全国 → 都道府県 → 市区町村 → カメラ\n"
-        +
-        "の順番で選択してください。";
-
-    }
+}
 
 
-    if(
-      input.includes("天気") ||
-      input.includes("気温")
-    ){
+if(
+input.includes("天気") ||
+input.includes("気温")
+){
 
-      answer =
-        "WEATHER REQUEST\n\n"
-        +
-        "WEATHER SCANを実行してください。";
+answer=
+"WEATHER REQUEST\n\n"
++
+"WEATHER SCANを実行してください。";
 
-    }
+}
 
 
-    result.textContent =
-      answer;
+result.textContent=
+answer;
 
-  },700);
+},700);
 
 }
 
@@ -1366,47 +1549,46 @@ function analyze(){
 
 function speakResult(){
 
-  const text =
-    document.getElementById(
-      "result"
-    ).textContent;
+const text=
+document.getElementById(
+"result"
+).textContent;
 
 
-  if(
-    !("speechSynthesis" in window)
-  ){
+if(
+!("speechSynthesis" in window)
+){
 
-    alert(
-      "音声読み上げに対応していません。"
-    );
+alert(
+"音声読み上げに対応していません。"
+);
 
-    return;
+return;
 
-  }
-
-
-  speechSynthesis.cancel();
+}
 
 
-  const speech =
-    new SpeechSynthesisUtterance(
-      text
-    );
+speechSynthesis.cancel();
 
 
-  speech.lang =
-    "ja-JP";
+const speech=
+new SpeechSynthesisUtterance(
+text
+);
 
-  speech.rate =
-    1;
+speech.lang=
+"ja-JP";
 
-  speech.pitch =
-    .9;
+speech.rate=
+1;
+
+speech.pitch=
+.9;
 
 
-  speechSynthesis.speak(
-    speech
-  );
+speechSynthesis.speak(
+speech
+);
 
 }
 
@@ -1417,99 +1599,95 @@ function speakResult(){
 
 async function getWeather(){
 
-  const weather =
-    document.getElementById(
-      "weather"
-    );
+const weather=
+document.getElementById(
+"weather"
+);
+
+weather.textContent=
+"SCANNING WEATHER...";
 
 
-  weather.textContent =
-    "SCANNING WEATHER...";
+try{
+
+const url=
+"https://api.open-meteo.com/v1/forecast"
++
+"?latitude=35.6762"
++
+"&longitude=139.6503"
++
+"&current=temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m,weather_code"
++
+"&timezone=Asia%2FTokyo";
 
 
-  try{
-
-    const url =
-      "https://api.open-meteo.com/v1/forecast"
-      +
-      "?latitude=35.6762"
-      +
-      "&longitude=139.6503"
-      +
-      "&current=temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m,weather_code"
-      +
-      "&timezone=Asia%2FTokyo";
+const response=
+await fetch(url);
 
 
-    const response =
-      await fetch(url);
+if(!response.ok){
+
+throw new Error();
+
+}
 
 
-    if(!response.ok){
+const data=
+await response.json();
 
-      throw new Error(
-        "Weather API error"
-      );
-
-    }
+const c=
+data.current;
 
 
-    const data =
-      await response.json();
+weather.textContent=
 
+"LOCATION : TOKYO\n\n"
 
-    const c =
-      data.current;
++
 
+"TEMP : "
++
+c.temperature_2m
++
+" °C\n"
 
-    weather.textContent =
++
 
-      "LOCATION : TOKYO\n\n"
+"FEELS : "
++
+c.apparent_temperature
++
+" °C\n"
 
-      +
++
 
-      "TEMP     : "
-      +
-      c.temperature_2m
-      +
-      " °C\n"
+"HUMIDITY : "
++
+c.relative_humidity_2m
++
+" %\n"
 
-      +
++
 
-      "FEELS    : "
-      +
-      c.apparent_temperature
-      +
-      " °C\n"
+"WIND : "
++
+c.wind_speed_10m
++
+" km/h\n\n"
 
-      +
++
 
-      "HUMIDITY : "
-      +
-      c.relative_humidity_2m
-      +
-      " %\n"
+"● WEATHER DATA RECEIVED";
 
-      +
+}
 
-      "WIND     : "
-      +
-      c.wind_speed_10m
-      +
-      " km/h\n\n"
+catch(e){
 
-      +
+weather.textContent=
+"WEATHER CONNECTION ERROR";
 
-      "● WEATHER DATA RECEIVED";
-
-  }
-
-  catch(error){
-
-    weather.textContent =
-      "WEATHER CONNECTION ERROR";
-
-  }
+}
 
 }
 
@@ -1521,17 +1699,16 @@ async function getWeather(){
 document
 .getElementById("query")
 .addEventListener(
-  "keydown",
-  event => {
+"keydown",
+e=>{
 
-    if(event.key === "Enter"){
+if(e.key==="Enter"){
 
-      analyze();
+analyze();
 
-    }
+}
 
-  }
-);
+});
 
 
 /* =====================================================
